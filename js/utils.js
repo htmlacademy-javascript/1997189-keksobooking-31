@@ -10,8 +10,9 @@ const getRandomInteger = (min,max) => {
 const getRandomFractional = (min,max) => {
   const lower = Math.min(Math.abs(min),Math.abs(max));
   const upper = Math.max(Math.abs(min),Math.abs(max));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return parseFloat(result.toFixed(4));
+
+  const result = Math.random() * (upper - lower) + lower;
+  return (+((result) .toFixed(5)));
 };
 
 const getUniqueInteger = (min,max) => {

@@ -28,12 +28,12 @@ const authorCount = getAuthorCount();
 //const getUniqueArrayElement = (arr) => arr[uniqueArrFeatures(0,arr.length - 1)];
 
 const createAuthor = () => ({
-  author:`img/avatars/user${authorCount()}.png`,
+  avatar:`img/avatars/user${authorCount()}.png`,
 });
 
 const createLocation = () => ({
-  LAT: getLatitude(MIN_LATITUDE,MAX_LATITUDE),
-  LNG: getLongitude(MIN_LONGITUDE,MAX_LONGITUDE)
+  lat: getLatitude(MIN_LATITUDE,MAX_LATITUDE),
+  lng: getLongitude(MIN_LONGITUDE,MAX_LONGITUDE)
 });
 
 const createOffer = () => ({
@@ -45,9 +45,9 @@ const createOffer = () => ({
   guests: getRandomInteger(MIN_GUESTS,MAX_GUESTS),
   checkin: getRandomArrayElement(CHECKIN),
   checkout: getRandomArrayElement(CHECKIN),
-  features: uniqueArrFeatures(),
+  features: FEATURES,//FEATURES[uniqueArrFeatures()],//дз 2 знач не должн повтор
   description:getRandomArrayElement(DESCRIPTION),
-  photos: getRandomArrayElement(PHOTOS),
+  photos: PHOTOS//getRandomArrayElement(PHOTOS),
 });
 
 const createAdvertisement = () => ({
