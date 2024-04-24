@@ -36,6 +36,7 @@ const createLocation = () => ({
   lng: getLongitude(MIN_LONGITUDE,MAX_LONGITUDE)
 });
 
+
 const createOffer = () => ({
   title: getRandomArrayElement(TITLE),
   address: createLocation(),

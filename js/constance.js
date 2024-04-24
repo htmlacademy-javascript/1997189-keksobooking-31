@@ -17,8 +17,8 @@ export const FEATURES = [
   'dishwasher',
   'parking',
   'washer',
-  'elevator',
-  'conditioner'
+  // 'elevator',
+  // 'conditioner'
 ];
 
 export const MIN_LATITUDE = 35.65000;
@@ -37,8 +37,8 @@ export const DESCRIPTION = [
   'Строка, заполнить самостоятельно7',
 ];
 
-export const MIN_PRICE = 100;//САМА ПРИДУМАЛА ЦЕНУ
-export const MAX_PRICE = 500;//САМА ПРИДУМАЛА ЦЕНУ
+export const MIN_PRICE = 500;//САМА ПРИДУМАЛА ЦЕНУ
+export const MAX_PRICE = 1000;//САМА ПРИДУМАЛА ЦЕНУ
 
 export const TYPE = [
   'palace',
@@ -59,6 +59,7 @@ export const CHECKIN = [
   '13:00',
   '14:00'
 ];
+
 
 export const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',

@@ -86,7 +86,6 @@ fieldset {
 .map__canvas {
   width: 100%;
   height: 500px;
-  min-height: 3200px;/*удалить*/
   background-color: #dddddd;
 }
 
