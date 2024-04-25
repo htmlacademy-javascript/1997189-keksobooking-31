@@ -37,8 +37,8 @@ export const DESCRIPTION = [
   'Строка, заполнить самостоятельно7',
 ];
 
-export const MIN_PRICE = 500;//САМА ПРИДУМАЛА ЦЕНУ
-export const MAX_PRICE = 1000;//САМА ПРИДУМАЛА ЦЕНУ
+export const MIN_PRICE = 30;//САМА ПРИДУМАЛА ЦЕНУ
+export const MAX_PRICE = 100;//САМА ПРИДУМАЛА ЦЕНУ
 
 export const TYPE = [
   'palace',
