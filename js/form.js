@@ -1,43 +1,221 @@
 
-const mapFilterInteractiveElements = [...document.querySelectorAll('.map__filter')];
-const adForm = document.querySelector('.ad-form');
-//form.classList.add('ad-form--disabled');
-const setOfInteractiveElements = [...document.querySelectorAll('.ad-form__element')];
-const mapFiltersForm = document.querySelector('.map__filters');
-const mapFeaturesElem = document.querySelector('.map__features');
-const adFormHeaderInput = document.querySelector('.ad-form-header');
+const mapFiltersForm = document.querySelector('.map__filters');//форма1
+const mapFilterInteractiveElements = [...document.querySelectorAll('.map__filters select')];//все селекты форма 1
+const mapFeaturesElem = [...document.querySelectorAll('.map__filters fieldset')];//филдсет в форме 1 чекбоксы
 
-/*слайдер тоже должен быть заблокирован? это див ad-form__slider. Его fieldset заблокирован, надо что = то еще?*/
 
-const makeInactiveForm = () => {
-  [adForm,mapFiltersForm,mapFeaturesElem].forEach((form) => form.classList.add('ad-form--disabled'));
+const adForm = document.querySelector('.ad-form');//форма 2
+const setOfAdFormInteractiveElements = [...document.querySelectorAll('.ad-form fieldset')];//все филдсеты в форме 2
 
-  [setOfInteractiveElements,mapFilterInteractiveElements, adFormHeaderInput].forEach((element) => {
-    if(Array.isArray(element)) {
-      element.forEach((interactiveElement) => interactiveElement.setAttribute('disabled', ''));
-    } else {
-      element.setAttribute('disabled', '');
-    }
-  });
+const makeInactiveForm = (form,elementsOfForm,additionalFields = []) => {
+  form.classList.add('ad-form--disabled');
+  const mergedArrays = [...elementsOfForm,...additionalFields];
+  mergedArrays.forEach((interactiveElement) => interactiveElement.setAttribute('disabled', ''));
 };
 
-//makeInactiveForm()
+// makeInactiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);//Передаем ФОРМу1
 
-const makeActiveForm = () => {
-  [adForm,mapFiltersForm,mapFeaturesElem].forEach((form) => form.classList.remove('ad-form--disabled'));
+// makeInactiveForm(adForm,setOfAdFormInteractiveElements);//Передаем ФОРМу 2
 
-  [setOfInteractiveElements,mapFilterInteractiveElements, adFormHeaderInput].forEach((element) => {
-    if(Array.isArray(element)) {
-      element.forEach((interactiveElement) => interactiveElement.removeAttribute('disabled'));
-    } else {
-      element.removeAttribute('disabled');
-    }
-  });
+const makeActiveForm  = (form,elementsOfForm,additionalFields = []) => {
+  form.classList.remove('ad-form--disabled');
+  const mergedArrays = [...elementsOfForm,...additionalFields];
+  mergedArrays.forEach((interactiveElement) => interactiveElement.removeAttribute('disabled'));
 };
 
-//makeActiveForm()
+//makeActiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);//Передаем ФОРМу1
+
+//makeActiveForm(adForm,setOfAdFormInteractiveElements);//Передаем ФОРМу 2
+const MIN_LENGTH = 30;
+const MAX_LENGTH = 100;
+const MAX_PRICE = 100000;
+
+const priceInput = document.querySelector('#price');
+const validatePrice = (value) => value && value <= MAX_PRICE;
+const roomsQuantity = adForm.querySelector('#room_number');
+const capacity = adForm.querySelector('#capacity');
+console.log(typeof(roomsQuantity.value));
 
 
- // setOfInteractiveElements.forEach((interactiveElement) => interactiveElement.setAttribute('disabled', ''));
-  // mapFilterInteractiveElements.forEach((element) => element.setAttribute('disabled',''));
-  // adFormHeaderInput.setAttribute('disabled', '');
+
+const pristine = new Pristine(adForm, {
+  classTo: 'ad-form__element',//на кот доб классы
+  errorTextParent: 'ad-form__element',//куда  б добавляться текст с ошибкой
+  errorTextClass:'ad-form__element--invalid'//класс для эл с текстом ошибки
+});
+
+const showPriceValidationError = () => `Cтоимость должна быть меньше ${MAX_PRICE}`;
+pristine.addValidator(priceInput,validatePrice,showPriceValidationError);
+
+//СООТНОШЕНИЕ КОЛ-ВО КОМНАТ: КОЛИЧЕСТВО ГОСТЕЙ 100 КОМНАТ???
+const RATIO_ROOMS_GUESTS = {
+  '1': ['1'],
+  '2' : ['1','2'],
+  '3' : ['1','2','3'],
+  '100': ['0'],
+};
+
+//Сообщение об ошибке. Передаю селектКомнат.value
+const roomsQuantityErrorMessage = function (roomsValue) {
+  switch (roomsValue) {
+    case '1' :
+      return '1 комната — «для 1 гостя»';
+    case '2' :
+      return '2 комнаты — «для 2 гостей» или «для 1 гостя»';
+    case '3' :
+      return '3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»;';
+    case '100' :
+      return '100 комнат — «не для гостей»';
+  }
+};
+
+//функция для события change на поле capacity(кол-во гостей)
+// Вишенкой на торте можно сделать проверку количества в момент выбора другого размера. Это удобно, когда пользователь сперва ввёл количество, а потом решил изменить размер. Для этого достаточно добавить обработчики событий 'change' на выбор размера, а внутри обработчика вызывать валидацию pristine.validate(amountField).
+//СВЯЗЬ ДВУХ ПОЛЕЙ!!!
+const onCapacityChange = () => {
+  pristine.validate(roomsQuantity);//НО отслеживаем внутри валидацию поля
+  console.log(capacity.value)//отслеживаются
+  console.log(roomsQuantity.value)//отслеживаются
+};
+
+//на событие change поля гости запускаем валидацию поля комнат
+capacity.addEventListener('change',onCapacityChange);
+
+//проверяем ключ количество комнат совпадает с capacity.value?
+const validateRoomsQuantity = () => {
+  RATIO_ROOMS_GUESTS[roomsQuantity.value].includes(capacity.value)
+console.log(roomsQuantity.value)//отсл
+console.log(capacity.value)//отсл
+};
+
+//.addValidator() мы вызовем на обоих выпадающих списках, ведь ошибку нужно показать всё равно, не важно, что первым выбрал пользователь.
+  pristine.addValidator(roomsQuantity,validateRoomsQuantity,roomsQuantityErrorMessage);
+  pristine.addValidator(capacity,validateRoomsQuantity,roomsQuantityErrorMessage);
+
+
+adForm.addEventListener('submit',(evt) => {
+  evt.preventDefault();
+  const isValid = pristine.validate();
+  if(isValid) {
+    console.log('Можно отправлять');
+  } else {
+    console.log('Нельзя');
+  }
+})
+
+//ВАЛИДАЦИЮ ПОШЛЯ ТITLЕ РЕАЛИЗОВАЛА С ПОМОЩЬЮ ДАТА АТРИБУТОВ. соОБЩЕНИЕ О ПУСТОМ ПОЛЕ НЕ ВЫВОДИЛОСЬ...ПРИЧИНА???
+// let message = '';
+// const getErrorMessage = () => message;
+// const validateTitle = function (value) {
+//   if (value.length) {
+//     return true;
+//   }
+//   return false;
+// };
+//
+
+
+
+// pristine.addValidator(adForm.querySelector('#title'),
+//   validateTitle,'The first character must be capitalized', 2, false);
+
+  // if(value & value.length >= 30 && value.length <= 100) {
+  //   return true;
+  // } else {
+  //   if(!value) {
+  //     message = errorMessage.heading.REQUIRED__FIELD;
+  //     console.log('но вэлью')
+  //     console.log(value.length)
+  //     return false;
+  //   }
+  //   if(!(value.length >= 30 && value.length <= 100)) {
+  //     message = errorMessage.heading.HEADING_LENGTH;
+  //     console.log('не меньше не больше');
+  //     return false;
+  //   }
+  // }
+//}
+  // if(!(value.length >= 30 && value.length <= 100)) {
+  //   message = errorMessage.heading.HEADING_LENGTH;
+  //   console.log(value)
+  //   return false;
+  // }
+  // if(!value) {
+  //   message = errorMessage.heading.REQUIRED__FIELD;
+  //   console.log('тут')
+  //   return false;
+  // }
+//};
+// console.log(validateTitle('asdfaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasdffff'))
+
+// pristine.addValidator(adForm.querySelector('#title'),
+//   validateTitle,getErrorMessage);
+//let message = '';
+// const getMessage = () => message;
+// console.log(message);
+
+// const title = adForm.querySelector('#title')
+// console.log(title)
+// const validateF = (value) => {
+//   console.log(value)
+//   if (value){
+//     console.log('длина')
+//     return true;
+// }
+//   message = 'The first character must be capitalized';
+//   return false;
+// };
+//pristine.addValidator(title, validateF, getMessage);
+//let message = '';
+
+// const errorMessage = {
+//   price: {
+//     REQUIRED__FIELD: 'обязательное поле',
+//     MAXIMUM_VALUE: `Максимальное значение ${MAX_PRICE} символов`,
+//     NUMERIC_FIELD:'Вводятся только числа'
+//   },
+//   heading: {
+//     REQUIRED__FIELD: 'обязательное поле',
+//     HEADING_LENGTH:`минимальная длина ${MIN_LENGTH} максимальная ${MAX_LENGTH} символов`,
+//   }
+// };
+
+
+// const roomsQuantityErrorMessage = function (roomsQuantitySelect) {
+//     switch (roomsQuantitySelect) {
+//       case '1' :
+//         console.log('1 комната «для 1 гостя»');
+//       return '1 комната «для 1 гостя»';
+
+//       case '2' :
+//         console.log('2 комната «для 2,1 гостя»') ;
+//         return '2 комнаты «для 2 гостей» или «для 1 гостя»';
+//       case '3' :
+//         console.log('3 комнаты «для 3 гостей», «для 2 гостей» или «для 1 гостя»') ;
+//         return '3 комнаты «для 3 гостей», «для 2 гостей» или «для 1 гостя»';
+//         case '100':
+//           return '100 комнат — «не для гостей»';
+//     }
+//   };
+
+//   //СООТНОШЕНИЕ КОМНАТЫ : ГОСТИ
+//   const RATIO_ROOMS_GUESTS = {
+//     '1': ['1'],
+//     '2': ['1', '2'],
+//     '3': ['1', '2', '3'],
+//     '100': ['0'],
+//   };
+
+//   // СООТНОСИМ: ключ[инпут количества комнат] включает вэлью селекта количества гостей(отслеживаю изменения в onCapacityChange при помощи  pristine.validate(roomsQuantity))
+//   const validateRoomsQuantity = () => RATIO_ROOMS_GUESTS[roomsQuantity.value].includes(capacity.value);
+
+
+//   // Для синхронизации двух полей (количество гостей и количество комнат), чтробы при изменении одного поля проверялось другое
+//   const onCapacityChange = () => {
+//     pristine.validate(roomsQuantity);//валидируем поле количество комнат, но отдаем в change поля кол-ва гостей capacity.addEventListener('change', onCapacityChange);
+//   };
+//   // Обработчик изменения выбора количества гостей, чтобы последовывательность изменений не была важна
+//   capacity.addEventListener('change', onCapacityChange);
+
+//   pristine.addValidator(roomsQuantity,validateRoomsQuantity,roomsQuantityErrorMessage);
+//   pristine.addValidator(capacity,validateRoomsQuantity,roomsQuantityErrorMessage);

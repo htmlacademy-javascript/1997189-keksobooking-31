@@ -89,6 +89,10 @@ fieldset {
   background-color: #dddddd;
 }
 
+/* .label-pristine__title__error-text {
+  color: red;
+  font-size: 20px;
+} */
 
 /**
  * Фильтры объявления
@@ -1047,4 +1051,9 @@ fieldset {
 
 .hidden {
   display: none;
+}
+/*.error-text*/
+/*Стилизация поля при ошибке валидации*/
+.pristine-error {
+  color: red;
 }
