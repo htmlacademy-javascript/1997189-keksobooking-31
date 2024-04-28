@@ -30,8 +30,10 @@ const MIN_LENGTH = 30;
 const MAX_LENGTH = 100;
 const MAX_PRICE = 100000;
 
-const priceInput = document.querySelector('#price');
-const validatePrice = (value) => value && value <= MAX_PRICE;
+const priceInput = adForm.querySelector('#price');
+const typeInput = adForm.querySelector('#type');
+
+//const validatePrice = (value) => value && value <= MAX_PRICE;
 const roomsQuantity = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
 console.log(typeof(roomsQuantity.value));
@@ -44,8 +46,6 @@ const pristine = new Pristine(adForm, {
   errorTextClass:'ad-form__element--invalid'//класс для эл с текстом ошибки
 });
 
-const showPriceValidationError = () => `Cтоимость должна быть меньше ${MAX_PRICE}`;
-pristine.addValidator(priceInput,validatePrice,showPriceValidationError);
 
 //СООТНОШЕНИЕ КОЛ-ВО КОМНАТ: КОЛИЧЕСТВО ГОСТЕЙ 100 КОМНАТ???
 const RATIO_ROOMS_GUESTS = {
@@ -55,8 +55,64 @@ const RATIO_ROOMS_GUESTS = {
   '100': ['0'],
 };
 
-//Сообщение об ошибке. Передаю селектКомнат.value
-const roomsQuantityErrorMessage = function (roomsValue) {
+const RATIO_TYPE_MIN_PRICE = {
+  'bungalow': 0,
+  'flat': 1000,
+  'hotel': 3000,
+  'house': 5000,
+  'palace': 10000,
+};
+
+// const typeErrorMessages = {
+//   minimum: () => `Стоимость ниже допустимой ${priceInput.getAttribute('min')}`,
+//   maximum: () => `Стоимость должна быть не выше ${MAX_PRICE}`,
+
+// };
+// const errorMessage = {
+//   minimum: `Стоимость ниже допустимой ${priceInput.getAttribute('min')}`,
+//   maximum: `Не больше ${MAX_PRICE}`
+// }
+let message = '';
+
+const showTypeErrorMessage = () => message;
+
+const errorMessage = {
+  minimum: `Стоимость ниже допустимой ${priceInput.getAttribute('min')}`,
+  maximum: `Не больше ${MAX_PRICE}`
+};
+
+const addAttributeToPrice = () => {
+  priceInput.setAttribute('min',RATIO_TYPE_MIN_PRICE[typeInput.value]);
+  priceInput.placeholder = RATIO_TYPE_MIN_PRICE[typeInput.value];
+};
+
+const validateTypeMinPrice = () => {
+  addAttributeToPrice(priceInput.value);
+  const priceInputMin = priceInput.getAttribute('min');
+  if(priceInput.value < Number(priceInputMin)) {
+    //message = errorMessage.minimum;
+    message = errorMessage.minimum;
+    return false;
+  } else if (priceInput.value > MAX_PRICE) {
+    message = errorMessage.maximum;
+    //showTypeErrorMessage();
+    return false;
+  }
+  return true;
+};
+
+const onPriceInputChange = () => {
+  pristine.validate(priceInput);//НО отслеживаем внутри поле цена жилья
+  // addAttributeToPrice(typeInput.value);
+};
+
+typeInput.addEventListener('change',onPriceInputChange);
+
+pristine.addValidator(typeInput,validateTypeMinPrice);//showTypeErrorMessage);
+pristine.addValidator(priceInput,validateTypeMinPrice,showTypeErrorMessage);
+
+
+const showQuantityErrorMessage = function (roomsValue) {
   switch (roomsValue) {
     case '1' :
       return '1 комната — «для 1 гостя»';
@@ -82,15 +138,31 @@ const onCapacityChange = () => {
 capacity.addEventListener('change',onCapacityChange);
 
 //проверяем ключ количество комнат совпадает с capacity.value?
-const validateRoomsQuantity = () => {
-  RATIO_ROOMS_GUESTS[roomsQuantity.value].includes(capacity.value)
-console.log(roomsQuantity.value)//отсл
-console.log(capacity.value)//отсл
+const validateRoomsQuantity = () => RATIO_ROOMS_GUESTS[roomsQuantity.value].includes(capacity.value);
+
+
+const TIMEIN = adForm.querySelector('#timein');
+const TIMEOUT = adForm.querySelector('#timeout');
+
+
+const onChangeTimeIn = () => {
+  if(TIMEIN.value !== TIMEOUT.value) {
+    TIMEOUT.value = TIMEIN.value;
+  }
 };
 
+const onChangeTimeOut = () => {
+  if(TIMEOUT.value !== TIMEIN.value) {
+    TIMEIN.value = TIMEOUT.value;
+  }
+};
+
+TIMEIN.addEventListener('change',onChangeTimeIn);
+TIMEOUT.addEventListener('change',onChangeTimeOut);
+
 //.addValidator() мы вызовем на обоих выпадающих списках, ведь ошибку нужно показать всё равно, не важно, что первым выбрал пользователь.
-  pristine.addValidator(roomsQuantity,validateRoomsQuantity,roomsQuantityErrorMessage);
-  pristine.addValidator(capacity,validateRoomsQuantity,roomsQuantityErrorMessage);
+  pristine.addValidator(roomsQuantity,validateRoomsQuantity,showQuantityErrorMessage);
+  pristine.addValidator(capacity,validateRoomsQuantity,showQuantityErrorMessage);
 
 
 adForm.addEventListener('submit',(evt) => {
@@ -219,3 +291,8 @@ adForm.addEventListener('submit',(evt) => {
 
 //   pristine.addValidator(roomsQuantity,validateRoomsQuantity,roomsQuantityErrorMessage);
 //   pristine.addValidator(capacity,validateRoomsQuantity,roomsQuantityErrorMessage);
+
+
+// const showTypeErrorMessage = () => `Стоимость ниже допустимой ${priceInput.getAttribute('min')}`;
+
+
