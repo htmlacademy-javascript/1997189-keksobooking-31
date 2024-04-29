@@ -12,9 +12,7 @@ const makeInactiveForm = (form,elementsOfForm,additionalFields = []) => {
   const mergedArrays = [...elementsOfForm,...additionalFields];
   mergedArrays.forEach((interactiveElement) => interactiveElement.setAttribute('disabled', ''));
 };
-
 // makeInactiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);//Передаем ФОРМу1
-
 // makeInactiveForm(adForm,setOfAdFormInteractiveElements);//Передаем ФОРМу 2
 
 const makeActiveForm  = (form,elementsOfForm,additionalFields = []) => {
@@ -24,8 +22,8 @@ const makeActiveForm  = (form,elementsOfForm,additionalFields = []) => {
 };
 
 //makeActiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);//Передаем ФОРМу1
-
 //makeActiveForm(adForm,setOfAdFormInteractiveElements);//Передаем ФОРМу 2
+
 const MIN_LENGTH = 30;
 const MAX_LENGTH = 100;
 const MAX_PRICE = 100000;
@@ -63,21 +61,12 @@ const RATIO_TYPE_MIN_PRICE = {
   'palace': 10000,
 };
 
-// const typeErrorMessages = {
-//   minimum: () => `Стоимость ниже допустимой ${priceInput.getAttribute('min')}`,
-//   maximum: () => `Стоимость должна быть не выше ${MAX_PRICE}`,
-
-// };
-// const errorMessage = {
-//   minimum: `Стоимость ниже допустимой ${priceInput.getAttribute('min')}`,
-//   maximum: `Не больше ${MAX_PRICE}`
-// }
 let message = '';
 
 const showTypeErrorMessage = () => message;
 
 const errorMessage = {
-  minimum: `Стоимость ниже допустимой ${priceInput.getAttribute('min')}`,
+  minimum: `Стоимость ниже допустимой ${priceInput.getAttribute('min')}`,//НЕ ВЫВОДИТ СТОИМОСТЬ, ПОДУМАТЬ ОТКУДА БРАТЬ
   maximum: `Не больше ${MAX_PRICE}`
 };
 
@@ -91,7 +80,7 @@ const validateTypeMinPrice = () => {
   const priceInputMin = priceInput.getAttribute('min');
   if(priceInput.value < Number(priceInputMin)) {
     //message = errorMessage.minimum;
-    message = errorMessage.minimum;
+    message = errorMessage.minimum;//НЕ НАХОДИТ ЦИФРУ. ПОДУМАТЬ, ГДЕ БРАТЬ
     return false;
   } else if (priceInput.value > MAX_PRICE) {
     message = errorMessage.maximum;
@@ -173,7 +162,7 @@ adForm.addEventListener('submit',(evt) => {
   } else {
     console.log('Нельзя');
   }
-})
+});
 
 //ВАЛИДАЦИЮ ПОШЛЯ ТITLЕ РЕАЛИЗОВАЛА С ПОМОЩЬЮ ДАТА АТРИБУТОВ. соОБЩЕНИЕ О ПУСТОМ ПОЛЕ НЕ ВЫВОДИЛОСЬ...ПРИЧИНА???
 // let message = '';
@@ -185,7 +174,6 @@ adForm.addEventListener('submit',(evt) => {
 //   return false;
 // };
 //
-
 
 
 // pristine.addValidator(adForm.querySelector('#title'),
@@ -296,3 +284,12 @@ adForm.addEventListener('submit',(evt) => {
 // const showTypeErrorMessage = () => `Стоимость ниже допустимой ${priceInput.getAttribute('min')}`;
 
 
+// const typeErrorMessages = {
+//   minimum: () => `Стоимость ниже допустимой ${priceInput.getAttribute('min')}`,
+//   maximum: () => `Стоимость должна быть не выше ${MAX_PRICE}`,
+
+// };
+// const errorMessage = {
+//   minimum: `Стоимость ниже допустимой ${priceInput.getAttribute('min')}`,
+//   maximum: `Не больше ${MAX_PRICE}`
+// }
