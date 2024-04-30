@@ -35,7 +35,11 @@ const makeActiveForm  = (form,elementsOfForm,additionalFields = []) => {
 
 //makeActiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);//Передаем ФОРМу1
 //makeActiveForm(adForm,setOfAdFormInteractiveElements);//Передаем ФОРМу 2
-
+const pristineAvatar = new Pristine(adForm, {
+  classTo: 'ad-form-header',//на кот доб классы
+  errorTextParent: 'ad-form-header',//куда  б. добавляться текст с ошибкой
+  errorTextClass:'ad-form__element--invalid'//класс для эл с текстом ошибки
+});
 
 const pristine = new Pristine(adForm, {
   classTo: 'ad-form__element',//на кот доб классы
@@ -75,6 +79,11 @@ const onPriceInputChange = () => {
   pristine.validate(priceInput);//НО отслеживаем внутри поле цена жилья
   // addAttributeToPrice(typeInput.value);
 };
+
+//валидация аватара
+const onAvatarChange = () => pristineAvatar.validate();
+const avatarInput = document.querySelector('#avatar');
+avatarInput.addEventListener('change',onAvatarChange);
 
 typeInput.addEventListener('change',onPriceInputChange);
 
@@ -137,9 +146,11 @@ pristine.addValidator(capacity,validateRoomsQuantity,showQuantityErrorMessage);
 adForm.addEventListener('submit',(evt) => {
   evt.preventDefault();
   const isValid = pristine.validate();
-  if(isValid) {
+  const isValid2 = pristineAvatar.validate();
+  if(isValid && isValid2) {
     console.log('Можно отправлять');
     pristine.reset();//В СЛУЧАЕ УДАЧНОЙ ОТПРАВКИ, ЧИСТИМ ПРИСТИН
+    pristineAvatar.reset();
   } else {
     console.log('Нельзя');
   }
