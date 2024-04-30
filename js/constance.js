@@ -68,3 +68,24 @@ export const PHOTOS = [
 ];
 
 export const MAX_LENGTH_ADVERTISEMENT_ARR = 10;
+
+
+
+//СООТНОШЕНИЕ КОЛ-ВО КОМНАТ: КОЛИЧЕСТВО ГОСТЕЙ
+export const RATIO_ROOMS_GUESTS = {
+  '1': ['1'],
+  '2' : ['1','2'],
+  '3' : ['1','2','3'],
+  '100': ['0'],
+};
+
+//соотношение типа жилья и стоимости
+export const RATIO_TYPE_MIN_PRICE = {
+  'bungalow': 0,
+  'flat': 1000,
+  'hotel': 3000,
+  'house': 5000,
+  'palace': 10000,
+};
+
+export const MAX_PRICE_ROOM = 100000;
