@@ -1,13 +1,16 @@
 import {RATIO_ROOMS_GUESTS, RATIO_TYPE_MIN_PRICE,MAX_PRICE_ROOM} from './constance.js';
-
-
-const mapFiltersForm = document.querySelector('.map__filters');//форма1
-const mapFilterInteractiveElements = [...document.querySelectorAll('.map__filters select')];//все селекты форма 1
-const mapFeaturesElem = [...document.querySelectorAll('.map__filters fieldset')];//филдсет в форме 1 чекбоксы
-
-
+//import {getInputValueToSlider} from './slider.js';
 const adForm = document.querySelector('.ad-form');//форма 2
-const setOfAdFormInteractiveElements = [...document.querySelectorAll('.ad-form fieldset')];//все филдсеты в форме 2
+//const sliderContainer = document.querySelector('.ad-form__slider');
+
+
+// const mapFiltersForm = document.querySelector('.map__filters');//форма1
+// const mapFilterInteractiveElements = [...document.querySelectorAll('.map__filters select')];//все селекты форма 1
+// const mapFeaturesElem = [...document.querySelectorAll('.map__filters fieldset')];//филдсет в форме 1 чекбоксы
+
+
+// //const adForm = document.querySelector('.ad-form');//форма 2
+// const setOfAdFormInteractiveElements = [...document.querySelectorAll('.ad-form fieldset')];//все филдсеты в форме 2
 
 const priceInput = adForm.querySelector('#price');
 const typeInput = adForm.querySelector('#type');
@@ -19,27 +22,13 @@ const TIMEIN = adForm.querySelector('#timein');
 const TIMEOUT = adForm.querySelector('#timeout');
 
 
-const makeInactiveForm = (form,elementsOfForm,additionalFields = []) => {
-  form.classList.add('ad-form--disabled');
-  const mergedArrays = [...elementsOfForm,...additionalFields];
-  mergedArrays.forEach((interactiveElement) => interactiveElement.setAttribute('disabled', ''));
-};
-// makeInactiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);//Передаем ФОРМу1
-// makeInactiveForm(adForm,setOfAdFormInteractiveElements);//Передаем ФОРМу 2
-
-const makeActiveForm  = (form,elementsOfForm,additionalFields = []) => {
-  form.classList.remove('ad-form--disabled');
-  const mergedArrays = [...elementsOfForm,...additionalFields];
-  mergedArrays.forEach((interactiveElement) => interactiveElement.removeAttribute('disabled'));
-};
-
 //makeActiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);//Передаем ФОРМу1
 //makeActiveForm(adForm,setOfAdFormInteractiveElements);//Передаем ФОРМу 2
-const pristineAvatar = new Pristine(adForm, {
-  classTo: 'ad-form-header',//на кот доб классы
-  errorTextParent: 'ad-form-header',//куда  б. добавляться текст с ошибкой
-  errorTextClass:'ad-form__element--invalid'//класс для эл с текстом ошибки
-});
+// const pristineAvatar = new Pristine(adForm, {
+//   classTo: 'ad-form-header',//на кот доб классы
+//   errorTextParent: 'ad-form-header',//куда  б. добавляться текст с ошибкой
+//   errorTextClass:'ad-form__element--invalid'//класс для эл с текстом ошибки
+// });
 
 const pristine = new Pristine(adForm, {
   classTo: 'ad-form__element',//на кот доб классы
@@ -69,13 +58,14 @@ const validateTypeMinPrice = () => {
     message = errorMessage(priceInputMin).minimum; //решение с передачей атрибута...откорректировала вывод, работает
     return false;
   } else if (priceInput.value > MAX_PRICE_ROOM) {
+    //priceInput.removeEventListener('change',getInputValueToSlider);
     message = errorMessage().maximum;
     return false;
   }
   return true;
 };
 
-const onPriceInputChange = () => {
+export const onPriceInputChange = () => {
   pristine.validate(priceInput);//НО отслеживаем внутри поле цена жилья
   // addAttributeToPrice(typeInput.value);
 };
@@ -87,7 +77,7 @@ avatarInput.addEventListener('change',onAvatarChange);
 
 typeInput.addEventListener('change',onPriceInputChange);
 
-pristine.addValidator(typeInput,validateTypeMinPrice);//showTypeErrorMessage); //убрала сообщение, чтоб не дубль. одинаовые как в инпуте цены рядом
+pristine.addValidator(typeInput,validateTypeMinPrice,showTypeErrorMessage);//showTypeErrorMessage); //убрала сообщение, чтоб не дубль. одинаовые как в инпуте цены рядом
 pristine.addValidator(priceInput,validateTypeMinPrice,showTypeErrorMessage);
 
 
@@ -123,16 +113,12 @@ const validateRoomsQuantity = () => RATIO_ROOMS_GUESTS[roomsQuantity.value].incl
 
 //Отслеживаем время заезда, корректируем
 const onChangeTimeIn = () => {
-  if(TIMEIN.value !== TIMEOUT.value) {
-    TIMEOUT.value = TIMEIN.value;
-  }
+  TIMEOUT.value = TIMEIN.value;
 };
 
 //Отслеживаем время выезда, корректируем
 const onChangeTimeOut = () => {
-  if(TIMEOUT.value !== TIMEIN.value) {
-    TIMEIN.value = TIMEOUT.value;
-  }
+  TIMEIN.value = TIMEOUT.value;
 };
 
 TIMEIN.addEventListener('change',onChangeTimeIn);
@@ -146,8 +132,9 @@ pristine.addValidator(capacity,validateRoomsQuantity,showQuantityErrorMessage);
 adForm.addEventListener('submit',(evt) => {
   evt.preventDefault();
   const isValid = pristine.validate();
-  const isValid2 = pristineAvatar.validate();
-  if(isValid && isValid2) {
+  //const isValid2 = pristineAvatar.validate();
+  if(isValid) {
+    /// if(isValid && isValid2) {
     console.log('Можно отправлять');
     pristine.reset();//В СЛУЧАЕ УДАЧНОЙ ОТПРАВКИ, ЧИСТИМ ПРИСТИН
     pristineAvatar.reset();
@@ -155,3 +142,11 @@ adForm.addEventListener('submit',(evt) => {
     console.log('Нельзя');
   }
 });
+// const priceInput = adForm.querySelector('#price');
+// const typeInput = adForm.querySelector('#type');
+
+// const roomsQuantity = adForm.querySelector('#room_number');
+// const capacity = adForm.querySelector('#capacity');
+
+// const TIMEIN = adForm.querySelector('#timein');
+// const TIMEOUT = adForm.querySelector('#timeout');

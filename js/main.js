@@ -1,9 +1,14 @@
 import './form.js';
+import './slider.js';
+import {createMarkers} from './map.js';
 
 import {getArrayOfAdvertisements} from './data.js';
-import {createCard} from './generate-cards.js';
+
 
 const data = getArrayOfAdvertisements();
 
-createCard(data[0]);
-console.log(data[0])
+//createCard(data[0]);
+console.log(data)
+console.log(L)
+
+createMarkers(data);

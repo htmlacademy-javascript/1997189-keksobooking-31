@@ -30,15 +30,61 @@ const getUniqueInteger = (min,max) => {
   };
 };
 
+
+const translateType = (type) => {
+  switch (type) {
+    case 'flat':
+      return 'Квартира';
+    case 'bungalow':
+      return 'Бунгало';
+    case 'house':
+      return 'Дом';
+    case 'palace':
+      return 'Дворец';
+    case 'hotel':
+      return 'Отель';
+    default:
+      return type;
+  }
+};
+
+// const getAuthorCount = () => {
+//   let count = 0;
+//   return function () {
+//     count ++;
+//     if (count < MAX_AUTHOR_QUANTITY) {
+//       return `0${count}`;
+//     }
+//     return count;
+//   };
+// };
+
 const getAuthorCount = () => {
   let count = 0;
   return function () {
     count ++;
-    if (count < MAX_AUTHOR_QUANTITY) {
-      return `0${count}`;
+    if (MAX_AUTHOR_QUANTITY.length === 2) {
+      return count.toString().padStart(2,'0');
     }
     return count;
   };
 };
+//num.toString().padStart(3, '0')
 
-export{getRandomInteger,getRandomFractional,getUniqueInteger,getAuthorCount};
+export const makeInactiveForm = (form,elementsOfForm,additionalFields = []) => {
+  form.classList.add('ad-form--disabled');
+  const mergedArrays = [...elementsOfForm,...additionalFields];
+  mergedArrays.forEach((interactiveElement) => interactiveElement.setAttribute('disabled', ''));
+};
+// makeInactiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);//Передаем ФОРМу1
+// makeInactiveForm(adForm,setOfAdFormInteractiveElements);//Передаем ФОРМу 2
+
+export const makeActiveForm = (form,elementsOfForm,additionalFields = []) => {
+  form.classList.remove('ad-form--disabled');
+  const mergedArrays = [...elementsOfForm,...additionalFields];
+  mergedArrays.forEach((interactiveElement) => interactiveElement.removeAttribute('disabled'));
+};
+
+
+
+export{getRandomInteger,getRandomFractional,getUniqueInteger,getAuthorCount,translateType};

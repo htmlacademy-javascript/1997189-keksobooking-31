@@ -1,4 +1,5 @@
-export const MAX_AUTHOR_QUANTITY = 10;
+export const MAX_AUTHOR_QUANTITY = '10';
+console.log(MAX_AUTHOR_QUANTITY.length)
 export const TITLE = [
   'Заголовок объявления',
   'Заголовок объявления2',
@@ -17,7 +18,7 @@ export const FEATURES = [
   'dishwasher',
   'parking',
   'washer',
-  // 'elevator',
+  'elevator',
   // 'conditioner'
 ];
 

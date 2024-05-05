@@ -1,19 +1,4 @@
-const translateType = (type) => {
-  switch (type) {
-    case 'flat':
-      return 'Квартира';
-    case 'bungalow':
-      return 'Бунгало';
-    case 'house':
-      return 'Дом';
-    case 'palace':
-      return 'Дворец';
-    case 'hotel':
-      return 'Отель';
-    default:
-      return type;
-  }
-};
+import{translateType} from './utils.js';
 
 const renderPhotos = (arrOfPhotos,elemForRender,elemContainer) => {
   const fragment = document.createDocumentFragment();
@@ -82,20 +67,21 @@ const createCard = (data) => {
     popupAvatar.src = avatar;
   }
 
-  if (photos.length === 0) {
+  if (!photos.length) {
     hideElement(offerPhotosImage);
   } else {
     renderPhotos(photos,offerPhotosImage,offerPhotos);
   }
 
   renderFeatures(featuresListItems,features);
-  fragment.appendChild(cardElement);
+  //fragment.appendChild(cardElement);
+  return cardElement;
 
-  map.appendChild(fragment);
+  //map.appendChild(fragment);
 };
 
 
 
-export {createCard };
+export {createCard};
 
 /*/*{author,offer:{title,address,guests,price,rooms,type,checkin,checkout,description,features,photos}}*/
