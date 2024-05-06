@@ -69,7 +69,7 @@ const getAuthorCount = () => {
     return count;
   };
 };
-//num.toString().padStart(3, '0')
+
 
 export const makeInactiveForm = (form,elementsOfForm,additionalFields = []) => {
   form.classList.add('ad-form--disabled');
@@ -84,7 +84,5 @@ export const makeActiveForm = (form,elementsOfForm,additionalFields = []) => {
   const mergedArrays = [...elementsOfForm,...additionalFields];
   mergedArrays.forEach((interactiveElement) => interactiveElement.removeAttribute('disabled'));
 };
-
-
 
 export{getRandomInteger,getRandomFractional,getUniqueInteger,getAuthorCount,translateType};

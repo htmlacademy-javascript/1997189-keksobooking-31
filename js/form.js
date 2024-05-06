@@ -1,16 +1,7 @@
 import {RATIO_ROOMS_GUESTS, RATIO_TYPE_MIN_PRICE,MAX_PRICE_ROOM} from './constance.js';
 //import {getInputValueToSlider} from './slider.js';
 const adForm = document.querySelector('.ad-form');//форма 2
-//const sliderContainer = document.querySelector('.ad-form__slider');
 
-
-// const mapFiltersForm = document.querySelector('.map__filters');//форма1
-// const mapFilterInteractiveElements = [...document.querySelectorAll('.map__filters select')];//все селекты форма 1
-// const mapFeaturesElem = [...document.querySelectorAll('.map__filters fieldset')];//филдсет в форме 1 чекбоксы
-
-
-// //const adForm = document.querySelector('.ad-form');//форма 2
-// const setOfAdFormInteractiveElements = [...document.querySelectorAll('.ad-form fieldset')];//все филдсеты в форме 2
 
 const priceInput = adForm.querySelector('#price');
 const typeInput = adForm.querySelector('#type');
@@ -24,11 +15,7 @@ const TIMEOUT = adForm.querySelector('#timeout');
 
 //makeActiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);//Передаем ФОРМу1
 //makeActiveForm(adForm,setOfAdFormInteractiveElements);//Передаем ФОРМу 2
-// const pristineAvatar = new Pristine(adForm, {
-//   classTo: 'ad-form-header',//на кот доб классы
-//   errorTextParent: 'ad-form-header',//куда  б. добавляться текст с ошибкой
-//   errorTextClass:'ad-form__element--invalid'//класс для эл с текстом ошибки
-// });
+
 
 const pristine = new Pristine(adForm, {
   classTo: 'ad-form__element',//на кот доб классы
@@ -55,10 +42,9 @@ const validateTypeMinPrice = () => {
   const priceInputMin = priceInput.getAttribute('min');
 
   if(priceInput.value < Number(priceInputMin)) {
-    message = errorMessage(priceInputMin).minimum; //решение с передачей атрибута...откорректировала вывод, работает
+    message = errorMessage(priceInputMin).minimum;
     return false;
   } else if (priceInput.value > MAX_PRICE_ROOM) {
-    //priceInput.removeEventListener('change',getInputValueToSlider);
     message = errorMessage().maximum;
     return false;
   }
@@ -69,11 +55,6 @@ export const onPriceInputChange = () => {
   pristine.validate(priceInput);//НО отслеживаем внутри поле цена жилья
   // addAttributeToPrice(typeInput.value);
 };
-
-//валидация аватара
-const onAvatarChange = () => pristineAvatar.validate();
-const avatarInput = document.querySelector('#avatar');
-avatarInput.addEventListener('change',onAvatarChange);
 
 typeInput.addEventListener('change',onPriceInputChange);
 
@@ -94,10 +75,6 @@ const showQuantityErrorMessage = function (roomsValue) {
   }
 };
 
-//функция для события change на поле capacity(кол-во гостей)
-// проверка количества в момент выбора другого размера.
-//Когда пользователь сперва ввёл количество, а потом решил изменить размер.
-// Для этого достаточно добавить обработчики событий 'change' на выбор размера, а внутри обработчика вызывать валидацию pristine.validate(amountField).
 //СВЯЗЬ ДВУХ ПОЛЕЙ!!!
 const onCapacityChange = () => {
   pristine.validate(roomsQuantity);//НО отслеживаем внутри валидацию поля
@@ -150,3 +127,24 @@ adForm.addEventListener('submit',(evt) => {
 
 // const TIMEIN = adForm.querySelector('#timein');
 // const TIMEOUT = adForm.querySelector('#timeout');
+
+// const pristineAvatar = new Pristine(adForm, {
+//   classTo: 'ad-form-header',//на кот доб классы
+//   errorTextParent: 'ad-form-header',//куда  б. добавляться текст с ошибкой
+//   errorTextClass:'ad-form__element--invalid'//класс для эл с текстом ошибки
+// });
+
+//const sliderContainer = document.querySelector('.ad-form__slider');
+
+
+// const mapFiltersForm = document.querySelector('.map__filters');//форма1
+// const mapFilterInteractiveElements = [...document.querySelectorAll('.map__filters select')];//все селекты форма 1
+// const mapFeaturesElem = [...document.querySelectorAll('.map__filters fieldset')];//филдсет в форме 1 чекбоксы
+
+
+// //const adForm = document.querySelector('.ad-form');//форма 2
+// const setOfAdFormInteractiveElements = [...document.querySelectorAll('.ad-form fieldset')];//все филдсеты в форме 2
+//валидация аватара
+//const onAvatarChange = () => pristineAvatar.validate();
+//const avatarInput = document.querySelector('#avatar');
+//avatarInput.addEventListener('change',onAvatarChange);
