@@ -3,8 +3,8 @@ import {RATIO_ROOMS_GUESTS, RATIO_TYPE_MIN_PRICE,MAX_PRICE_ROOM} from './constan
 const adForm = document.querySelector('.ad-form');//форма 2
 
 
-const priceInput = adForm.querySelector('#price');
-const typeInput = adForm.querySelector('#type');
+export const priceInput = adForm.querySelector('#price');
+export const typeInput = adForm.querySelector('#type');
 
 const roomsQuantity = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
@@ -17,7 +17,7 @@ const TIMEOUT = adForm.querySelector('#timeout');
 //makeActiveForm(adForm,setOfAdFormInteractiveElements);//Передаем ФОРМу 2
 
 
-const pristine = new Pristine(adForm, {
+export const pristine = new Pristine(adForm, {
   classTo: 'ad-form__element',//на кот доб классы
   errorTextParent: 'ad-form__element',//куда  б. добавляться текст с ошибкой
   errorTextClass:'ad-form__element--invalid'//класс для эл с текстом ошибки
@@ -25,7 +25,7 @@ const pristine = new Pristine(adForm, {
 
 let message = '';
 
-const showTypeErrorMessage = () => message;
+export const showTypeErrorMessage = () => message;
 
 const addAttributeToPrice = () => {
   priceInput.setAttribute('min',RATIO_TYPE_MIN_PRICE[typeInput.value]);
@@ -51,14 +51,13 @@ const validateTypeMinPrice = () => {
   return true;
 };
 
-export const onPriceInputChange = () => {
+const onPriceInputChange = () => {
   pristine.validate(priceInput);//НО отслеживаем внутри поле цена жилья
-  // addAttributeToPrice(typeInput.value);
 };
 
 typeInput.addEventListener('change',onPriceInputChange);
 
-pristine.addValidator(typeInput,validateTypeMinPrice,showTypeErrorMessage);//showTypeErrorMessage); //убрала сообщение, чтоб не дубль. одинаовые как в инпуте цены рядом
+pristine.addValidator(typeInput,validateTypeMinPrice);//,showTypeErrorMessage);//showTypeErrorMessage); //убрала сообщение, чтоб не дубль. одинаовые как в инпуте цены рядом
 pristine.addValidator(priceInput,validateTypeMinPrice,showTypeErrorMessage);
 
 
@@ -114,37 +113,8 @@ adForm.addEventListener('submit',(evt) => {
     /// if(isValid && isValid2) {
     console.log('Можно отправлять');
     pristine.reset();//В СЛУЧАЕ УДАЧНОЙ ОТПРАВКИ, ЧИСТИМ ПРИСТИН
-    pristineAvatar.reset();
+    //pristineAvatar.reset();
   } else {
     console.log('Нельзя');
   }
 });
-// const priceInput = adForm.querySelector('#price');
-// const typeInput = adForm.querySelector('#type');
-
-// const roomsQuantity = adForm.querySelector('#room_number');
-// const capacity = adForm.querySelector('#capacity');
-
-// const TIMEIN = adForm.querySelector('#timein');
-// const TIMEOUT = adForm.querySelector('#timeout');
-
-// const pristineAvatar = new Pristine(adForm, {
-//   classTo: 'ad-form-header',//на кот доб классы
-//   errorTextParent: 'ad-form-header',//куда  б. добавляться текст с ошибкой
-//   errorTextClass:'ad-form__element--invalid'//класс для эл с текстом ошибки
-// });
-
-//const sliderContainer = document.querySelector('.ad-form__slider');
-
-
-// const mapFiltersForm = document.querySelector('.map__filters');//форма1
-// const mapFilterInteractiveElements = [...document.querySelectorAll('.map__filters select')];//все селекты форма 1
-// const mapFeaturesElem = [...document.querySelectorAll('.map__filters fieldset')];//филдсет в форме 1 чекбоксы
-
-
-// //const adForm = document.querySelector('.ad-form');//форма 2
-// const setOfAdFormInteractiveElements = [...document.querySelectorAll('.ad-form fieldset')];//все филдсеты в форме 2
-//валидация аватара
-//const onAvatarChange = () => pristineAvatar.validate();
-//const avatarInput = document.querySelector('#avatar');
-//avatarInput.addEventListener('change',onAvatarChange);

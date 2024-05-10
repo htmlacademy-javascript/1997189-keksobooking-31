@@ -1,15 +1,13 @@
-//import{onPriceInputChange} from './form.js';
+import{priceInput,pristine} from './form.js';
+import{MAX_PRICE_ROOM} from './constance.js';
 const sliderContainer = document.querySelector('.ad-form__slider');
-const priceInput = document.querySelector('#price');
-
-priceInput.value = 80000;
 
 noUiSlider.create(sliderContainer, {
   range: {
     min: 0,
-    max: 100000,
+    max: MAX_PRICE_ROOM,
   },
-  start: 80000,
+  start: 0,
   step: 1000,
   connect: 'lower',
   format:
@@ -25,15 +23,15 @@ noUiSlider.create(sliderContainer, {
   }
 });
 
-sliderContainer.noUiSlider.on('update', () => {
-  if(priceInput.value > 100000) {
-    return;
-  }
-  priceInput.value = sliderContainer.noUiSlider.get();
+sliderContainer.noUiSlider.on('slide', () => {
+  const sliderInput = sliderContainer.noUiSlider.get();
+  priceInput.value = sliderInput;
+  pristine.validate(priceInput);
 });
 
+
 priceInput.addEventListener('change', (evt) => {
-  if (priceInput.value > 100000) {
+  if (priceInput.value > MAX_PRICE_ROOM) {
     sliderContainer.noUiSlider.reset();
   }
   sliderContainer.noUiSlider.set(evt.target.value);

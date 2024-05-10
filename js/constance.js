@@ -1,5 +1,5 @@
 export const MAX_AUTHOR_QUANTITY = '10';
-console.log(MAX_AUTHOR_QUANTITY.length)
+
 export const TITLE = [
   'Заголовок объявления',
   'Заголовок объявления2',
@@ -69,8 +69,6 @@ export const PHOTOS = [
 ];
 
 export const MAX_LENGTH_ADVERTISEMENT_ARR = 10;
-
-
 
 //СООТНОШЕНИЕ КОЛ-ВО КОМНАТ: КОЛИЧЕСТВО ГОСТЕЙ
 export const RATIO_ROOMS_GUESTS = {
