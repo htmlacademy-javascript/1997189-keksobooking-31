@@ -1,4 +1,4 @@
-import{MAX_AUTHOR_QUANTITY} from './constance.js';
+import{MAX_AUTHOR_QUANTITY} from './constants.js';
 
 const getRandomInteger = (min,max) => {
   const lower = Math.ceil(Math.min(Math.abs(min),Math.abs(max)));

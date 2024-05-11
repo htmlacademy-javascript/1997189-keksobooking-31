@@ -12,12 +12,14 @@ const renderPhotos = (arrOfPhotos,elemForRender,elemContainer) => {
 };
 
 const renderFeatures = (listItems,arrOfFeatures) => {
-  listItems.forEach((item) => {
-    const hasFeature = arrOfFeatures.some((feature) => item.classList.contains(`popup__feature--${feature}`));
-    if(!hasFeature) {
-      item.remove();
-    }
-  });
+  if (arrOfFeatures) {
+    listItems.forEach((item) => {
+      const hasFeature = arrOfFeatures.some((feature) => item.classList.contains(`popup__feature--${feature}`));
+      if(!hasFeature) {
+        item.remove();
+      }
+    });
+  }
 };
 
 const hideElement = (field) => {
@@ -28,8 +30,8 @@ const advertisementCardTemplate = document.querySelector('#card').content.queryS
 
 const map = document.querySelector('#map-canvas');
 
-const createCard = (data) => {
-  const {author,offer} = data;
+const createCard = (datum) => {
+  const {author,offer} = datum;
   const {title,address,guests,price,rooms,type,checkin,checkout,description,features,photos} = offer;
   const {avatar} = author;
 
@@ -67,12 +69,11 @@ const createCard = (data) => {
     popupAvatar.src = avatar;
   }
 
-  if (!photos.length) {
+  if (!photos) {
     hideElement(offerPhotosImage);
   } else {
     renderPhotos(photos,offerPhotosImage,offerPhotos);
   }
-
   renderFeatures(featuresListItems,features);
   //fragment.appendChild(cardElement);
   return cardElement;

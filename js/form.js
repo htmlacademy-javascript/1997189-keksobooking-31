@@ -1,4 +1,4 @@
-import {RATIO_ROOMS_GUESTS, RATIO_TYPE_MIN_PRICE,MAX_PRICE_ROOM} from './constance.js';
+import {RATIO_ROOMS_GUESTS, RATIO_TYPE_MIN_PRICE,MAX_PRICE_ROOM} from './constants.js';
 //import {getInputValueToSlider} from './slider.js';
 const adForm = document.querySelector('.ad-form');//форма 2
 
@@ -104,6 +104,16 @@ TIMEOUT.addEventListener('change',onChangeTimeOut);
 pristine.addValidator(roomsQuantity,validateRoomsQuantity,showQuantityErrorMessage);
 pristine.addValidator(capacity,validateRoomsQuantity,showQuantityErrorMessage);
 
+const submitBtn = document.querySelector('.ad-form__submit');
+console.log(submitBtn)
+const blockSubmitBtn = () => {
+  submitBtn.disabled = true;
+};
+
+const unBlockSubmitBtn = () => {
+  submitBtn.disabled = false;
+};
+
 
 adForm.addEventListener('submit',(evt) => {
   evt.preventDefault();
@@ -112,8 +122,18 @@ adForm.addEventListener('submit',(evt) => {
   if(isValid) {
     /// if(isValid && isValid2) {
     console.log('Можно отправлять');
+    const formData = new FormData(evt.target);
+    fetch(
+      ' https://31.javascript.htmlacademy.pro/keksobooking',
+      {
+        method: 'POST',
+        body: formData,
+      },
+    );
+    blockSubmitBtn();
     pristine.reset();//В СЛУЧАЕ УДАЧНОЙ ОТПРАВКИ, ЧИСТИМ ПРИСТИН
     //pristineAvatar.reset();
+    //adForm.reset();
   } else {
     console.log('Нельзя');
   }

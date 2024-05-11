@@ -88,3 +88,14 @@ export const RATIO_TYPE_MIN_PRICE = {
 };
 
 export const MAX_PRICE_ROOM = 100000;
+
+export const BASE_URL = 'https://31.javascript.htmlacademy.pro/keksobooking';
+export const Route = {
+  GET_DATA: '/data',
+  SEND_DATA: '/',
+};
+
+export const ErrorText = {
+  GET_DATA: 'Не удалось загрузить данные. Попробуйте обновить страницу',
+  SEND_DATA: 'Не удалось отправить форму. Попробуйте ещё раз',
+};

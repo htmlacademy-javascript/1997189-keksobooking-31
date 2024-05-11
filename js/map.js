@@ -26,7 +26,7 @@ makeInactiveForm(adForm,setOfAdFormInteractiveElements);//Передаем ФО�
 //создаем объект карты, в него передаем элемент map-canvas, куда нужно поместить карту, координаты
 const map = L.map('map-canvas')
   .on('load',() => {
-    makeActiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);//Передаем ФОРМу1
+
     makeActiveForm(adForm,setOfAdFormInteractiveElements);//Передаем ФОРМу 2
   })
   .setView(cityCenter,ZOOM);
@@ -83,7 +83,6 @@ const pinIconsConfig = {
   anchorY: 40,
 };
 
-
 const pinIcons = L.icon({
   iconUrl: pinIconsConfig.url,
   iconSize: [pinIconsConfig.width, pinIconsConfig.height],
@@ -94,7 +93,6 @@ console.log(markerGroup)
 
 const createMarker = (datum) => {
   const {lat,lng} = datum.location;
-  //createCard(datum);
 
   const marker = L.marker({
     lat,
@@ -109,21 +107,19 @@ const createMarker = (datum) => {
 };
 
 export const createMarkers = (data) => {
+
   data.forEach((datum) => {
     createMarker(datum);
   });
 
 };
 const btn = document.querySelector('.btn');
-console.log(btn)
 btn.addEventListener('click', (evt) => {
 
   markerGroup.clearLayers();
-})
-//debugger;
+});
 
-//markerGroup.clearLayer();
-console.log(markerGroup);
+//markerGroup.clearLayer();//работает только в кнопке
 
 
 /*export const createCustomPopup = (datumForPopup) => {
