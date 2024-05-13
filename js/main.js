@@ -34,19 +34,21 @@ const showDataErrorMessage = () => {
   },ALERT_SHOW_TIME);
 };
 
-fetch('https://31.javascript.htmlacademy.pro/keksobooking/data')
+fetch('https://31.javascript.htmlacademy.pro/keksobooking/dat')
   .then((response) => {
     if (!response.ok) {
-      throw new Error(ErrorText.GET_DATA);
+      console.log(ErrorText.GET_DATA)
+      throw new Error(ErrorText.GET_DATA);//почему не выбрасывается ошибка???
     }
     makeActiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);//Передаем ФОРМу1
+    console.log(response.json)
     return response.json();
   })
   .then((cards) => {
-    console.log(cards);
+    console.log('в зен');
     createMarkers(cards);
   })
   .catch(() => {
+    console.log('я в кетч');
     showDataErrorMessage();
   });
-//createMarkers(data);

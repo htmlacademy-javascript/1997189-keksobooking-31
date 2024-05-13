@@ -12,14 +12,14 @@ const renderPhotos = (arrOfPhotos,elemForRender,elemContainer) => {
 };
 
 const renderFeatures = (listItems,arrOfFeatures) => {
-  if (arrOfFeatures) {
+ // if (arrOfFeatures) {
     listItems.forEach((item) => {
       const hasFeature = arrOfFeatures.some((feature) => item.classList.contains(`popup__feature--${feature}`));
       if(!hasFeature) {
         item.remove();
       }
     });
-  }
+ // }
 };
 
 const hideElement = (field) => {
@@ -51,7 +51,9 @@ const createCard = (datum) => {
   const popupAvatar = cardElement.querySelector('.popup__avatar');
 
   popupTitle.textContent = title;
-  popupAdress.textContent = `${address.lat} ${address.lng}`;
+  //console.log(`${offer.address.lat} ${offer.address.lng}`)
+  //popupAdress.textContent = `${address.lat} ${address.lng}`;
+  popupAdress.textContent = address;
   popupPrice.textContent = `${price} ₽/ночь`;
   quantityOfGuests.textContent = `${rooms} комнаты для ${guests} гостей`;// КОРРЕКЦИЯ ОКОНЧАНИЙ СУЩЕСТВИТЕЛЬНЫХ!
   popupType.textContent = translateType(type);
@@ -74,7 +76,11 @@ const createCard = (datum) => {
   } else {
     renderPhotos(photos,offerPhotosImage,offerPhotos);
   }
-  renderFeatures(featuresListItems,features);
+
+  if(features) {
+    renderFeatures(featuresListItems,features);
+  }
+
   //fragment.appendChild(cardElement);
   return cardElement;
 

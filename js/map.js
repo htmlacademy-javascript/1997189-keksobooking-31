@@ -7,6 +7,38 @@ const mapFeaturesElem = [...document.querySelectorAll('.map__filters fieldset')]
 const setOfAdFormInteractiveElements = [...document.querySelectorAll('.ad-form fieldset')];//все филдсеты в форме 2
 const adForm = document.querySelector('.ad-form');//форма 2
 
+
+const address = adForm.querySelector('#address');
+const START_COORDINATE = {
+  lat: 35.68948,
+  lng: 139.69170,
+};
+
+const mainIconConfig = {
+  url: './img/main-pin.svg',
+  width: 52,
+  height: 52,
+  anchorX: 26,
+  anchorY: 52,
+};
+
+const mainPinIcon = L.icon({
+  iconUrl: mainIconConfig.url,
+  iconSize: [mainIconConfig.width, mainIconConfig.height],
+  iconAnchor: [mainIconConfig.anchorX, mainIconConfig.anchorY],
+});
+
+
+//создаем маркер; указываем старт координат
+const mainPinMarker = L.marker (START_COORDINATE,
+  {
+    draggable: true,//маркер перемещаем
+    icon: mainPinIcon,
+  },
+);
+
+const {lat:latForMainPin,lng:lngForMainPin} = mainPinMarker.getLatLng();
+
 //const baloonCardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 //Настройки из документации openstreetmap
@@ -33,43 +65,23 @@ const map = L.map('map-canvas')
 L.tileLayer(TILE_LAYER, {
   attribution: COPYRIGHT
 }).addTo(map);//метод для добавления всего, что насоздовалось в OpenStreetMap в нашу оболочку для карты Leaflet
-const address = adForm.querySelector('#address');
-const START_COORDINATE = {
-  lat: 35.68948,
-  lng: 139.69170,
+
+export const setStartingAddress = () => {
+  address.value = `${latForMainPin},${lngForMainPin}`;
+  return address.value;
+ // console.log(address.value)
+  //address.value = `${cityCenter.lat},${cityCenter.lng}`;
 };
-
-const mainIconConfig = {
-  url: './img/main-pin.svg',
-  width: 52,
-  height: 52,
-  anchorX: 26,
-  anchorY: 52,
-};
-
-const mainPinIcon = L.icon({
-  iconUrl: mainIconConfig.url,
-  iconSize: [mainIconConfig.width, mainIconConfig.height],
-  iconAnchor: [mainIconConfig.anchorX, mainIconConfig.anchorY],
-});
-
-//создаем маркер; указываем старт координат
-const mainPinMarker = L.marker (START_COORDINATE,
-  {
-    draggable: true,//маркер перемещаем
-    icon: mainPinIcon,
-  },
-);
-
-const {lat:latForMainPin,lng:lngForMainPin} = mainPinMarker.getLatLng();
-address.value = `${latForMainPin},${lngForMainPin}`;
+//присвоение полю адреса изначальных координат
+setStartingAddress();
 
 mainPinMarker.addTo(map);//доб маркер на карту
-//коненые Координаты перемещенной мыши
 
+//конечные Координаты перемещенной мыши
+//координаты нужно привести к числу?
 mainPinMarker.on('moveend',(evt) => {
   const {lat:latForInput,lng:lngForInput} = evt.target.getLatLng();
-  address.value = `${latForInput},${lngForInput}`;//ОБРАБОТАТЬ КООРДИНАТЫ В ПОЛЕ АДРЕС!!!
+  address.value = `${latForInput.toFixed(5)} ${lngForInput.toFixed(5)}`;
 });
 
 //добавила свой пин на карту
@@ -89,7 +101,6 @@ const pinIcons = L.icon({
   iconAnchor: [pinIconsConfig.anchorX, pinIconsConfig.anchorY],
 });
 const markerGroup = L.layerGroup().addTo(map);
-console.log(markerGroup)
 
 const createMarker = (datum) => {
   const {lat,lng} = datum.location;
@@ -114,60 +125,11 @@ export const createMarkers = (data) => {
 
 };
 const btn = document.querySelector('.btn');
-btn.addEventListener('click', (evt) => {
-
+btn.addEventListener('click', () => {
   markerGroup.clearLayers();
 });
 
-//markerGroup.clearLayer();//работает только в кнопке
 
+export const returnMarkerToStart = () => mainPinMarker.setLatLng(START_COORDINATE);
+//Возвращение красной метки на место по нажатию на кнопку очистить
 
-/*export const createCustomPopup = (datumForPopup) => {
-  const popup = baloonCardTemplate.cloneNode(true);
-  console.log(popup);
-  const popupImg = popup.querySelector('.popup__avatar');
-  const popupTitle = popup.querySelector('.popup__title');
-  const popupText = popup.querySelector('.popup__text--address');
-  const popupPrice = popup.querySelector('.popup__text--price');
-  const popupType = popup.querySelector('.popup__type');
-  const popupCapacity = popup.querySelector('.popup__text--capacity');
-  const popupTime = popup.querySelector('.popup__text--time');
-  console.log(popupTime);
-  console.log(popupCapacity);
-
-  popupImg.src = datumForPopup.author.avatar;
-  popupTitle.textContent = datumForPopup.offer.title;
-  popupText.textContent = Object.values(datumForPopup.offer.address);
-  popupPrice.firstChild.textContent = datumForPopup.offer.price;
-  popupType.textContent = translateType(datumForPopup.offer.type);
-  popupCapacity.textContent = `${datumForPopup.offer.rooms} комнаты для ${datumForPopup.offer.guests} гостей`;
-  popupTime.textContent = `Заезд после ${datumForPopup.offer.checkin}, выезд до ${datumForPopup.offer.checkout}`;
-
-
-
-
-
-  console.log(popupTitle)
-  console.log(datumForPopup);
-};
-*/
-
-// export const findAdressForMarker = (data) => data.forEach((datum) => {
-//   const {lat,lng} = datum.location;
-
-//   //createCustomPopup(datum);
-//   createCard(datum);
-
-//   const marker = L.marker({
-//     lat,
-//     lng,
-//   },
-//   {
-//     icon: pinIcons,
-//   });
-
-//   marker.addTo(map)
-//     .bindPopup(createCard(datum));
-// });
-//export const findAdressForMarker = (data) => data.forEach
-//});

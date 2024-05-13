@@ -1,9 +1,12 @@
-import {RATIO_ROOMS_GUESTS, RATIO_TYPE_MIN_PRICE,MAX_PRICE_ROOM} from './constants.js';
+import {RATIO_ROOMS_GUESTS, RATIO_TYPE_MIN_PRICE,MAX_PRICE_ROOM,ErrorText} from './constants.js';
 //import {getInputValueToSlider} from './slider.js';
+import {returnMarkerToStart,setStartingAddress} from './map';
+import {isEscapeKey} from './utils.js';
+import {resetSliderPrice} from './slider.js';
 const adForm = document.querySelector('.ad-form');//форма 2
+const resetButton = document.querySelector('.ad-form__reset');
 
-
-export const priceInput = adForm.querySelector('#price');
+const priceInput = adForm.querySelector('#price');
 export const typeInput = adForm.querySelector('#type');
 
 const roomsQuantity = adForm.querySelector('#room_number');
@@ -11,7 +14,57 @@ const capacity = adForm.querySelector('#capacity');
 
 const TIMEIN = adForm.querySelector('#timein');
 const TIMEOUT = adForm.querySelector('#timeout');
+const body = document.querySelector('body');
 
+
+const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+const successMessage = successMessageTemplate.cloneNode(true);
+
+const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+
+const errorMessageForSending = errorMessageTemplate.cloneNode(true);
+
+const closeSuccessMessage = () => {
+  successMessage.remove();
+  document.removeEventListener('keydown', onDocumentKeyDown);
+};
+
+function onDocumentKeyDown (evt) {
+  if(isEscapeKey(evt)) {
+    closeSuccessMessage();
+  }
+}
+
+const closeErrorMessageForSending = () => {
+  errorMessageForSending.remove();
+  document.removeEventListener('keydown', onDocumentErrorKeyDown);
+};
+
+const showErrorMessageForSending = () => {
+  body.append(errorMessageForSending);
+  const errorMessageBtn = errorMessageForSending.querySelector('.error__button');
+
+  errorMessageBtn.addEventListener('click', () => {
+    errorMessageForSending.remove();
+  });
+  document.addEventListener('keydown', onDocumentErrorKeyDown);
+
+  const errorOverlay = document.querySelector('.error');
+  errorOverlay.addEventListener('click',closeErrorMessageForSending);
+};
+
+function onDocumentErrorKeyDown (evt) {
+  if(isEscapeKey(evt)) {
+    closeErrorMessageForSending();
+  }
+}
+
+const showSuccessMessage = () => {
+  body.append(successMessage);
+  const successOverlay = document.querySelector('.success');
+  successOverlay.addEventListener('click',closeSuccessMessage);
+  document.addEventListener('keydown', onDocumentKeyDown);
+};
 
 //makeActiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);//Передаем ФОРМу1
 //makeActiveForm(adForm,setOfAdFormInteractiveElements);//Передаем ФОРМу 2
@@ -77,8 +130,6 @@ const showQuantityErrorMessage = function (roomsValue) {
 //СВЯЗЬ ДВУХ ПОЛЕЙ!!!
 const onCapacityChange = () => {
   pristine.validate(roomsQuantity);//НО отслеживаем внутри валидацию поля
-  console.log(capacity.value)//отслеживаются
-  console.log(roomsQuantity.value)//отслеживаются
 };
 
 //на событие change поля гости запускаем валидацию поля комнат
@@ -105,7 +156,7 @@ pristine.addValidator(roomsQuantity,validateRoomsQuantity,showQuantityErrorMessa
 pristine.addValidator(capacity,validateRoomsQuantity,showQuantityErrorMessage);
 
 const submitBtn = document.querySelector('.ad-form__submit');
-console.log(submitBtn)
+
 const blockSubmitBtn = () => {
   submitBtn.disabled = true;
 };
@@ -114,6 +165,25 @@ const unBlockSubmitBtn = () => {
   submitBtn.disabled = false;
 };
 
+//При успешной отправке формы или её очистке (нажатие на кнопку .ad-form__reset) страница, не перезагружаясь, переходит в состояние
+const resetForm = () => {
+  adForm.reset();
+  pristine.reset();//В СЛУЧАЕ УДАЧНОЙ ОТПРАВКИ, ЧИСТИМ ПРИСТИН
+  returnMarkerToStart();
+  resetSliderPrice();
+  setStartingAddress();
+
+  // все заполненные поля возвращаются в изначальное состояние;
+  // фильтрация (состояние фильтров и отфильтрованные метки) сбрасывается;???
+  // метка адреса возвращается в исходное положение;
+  // значение поля адреса корректируется соответственно исходному положению метки;
+  // если на карте был показан балун, то он должен быть скрыт.???
+};
+const forReset = () => {
+  resetForm();
+
+};
+resetButton.addEventListener('click',forReset);
 
 adForm.addEventListener('submit',(evt) => {
   evt.preventDefault();
@@ -122,19 +192,39 @@ adForm.addEventListener('submit',(evt) => {
   if(isValid) {
     /// if(isValid && isValid2) {
     console.log('Можно отправлять');
+    blockSubmitBtn();
+
     const formData = new FormData(evt.target);
     fetch(
-      ' https://31.javascript.htmlacademy.pro/keksobooking',
+      ' https://31.javascript.htmlacademy.pro/keksobooking', //https://31.javascript.htmlacademy.pro/keksobooking
       {
         method: 'POST',
         body: formData,
       },
-    );
-    blockSubmitBtn();
-    pristine.reset();//В СЛУЧАЕ УДАЧНОЙ ОТПРАВКИ, ЧИСТИМ ПРИСТИН
-    //pristineAvatar.reset();
-    //adForm.reset();
-  } else {
-    console.log('Нельзя');
+    ).then((response) => {
+      if(response.ok) {
+        resetForm();
+        showSuccessMessage();
+      } else {
+        showErrorMessageForSending();
+        console.log('перехват в ошибке респонс ок');
+        throw new Error(ErrorText.SEND_DATA);
+      }
+    })
+      .catch((err) => {
+        console.log('перехват в catch');
+        throw new Error(err.message);
+      })
+      .finally(() => {
+        unBlockSubmitBtn();
+        console.log('в файнелли');
+      });
   }
 });
+    // blockSubmitBtn();
+    // pristine.reset();//В СЛУЧАЕ УДАЧНОЙ ОТПРАВКИ, ЧИСТИМ ПРИСТИН
+    //pristineAvatar.reset();
+    //adForm.reset();
+
+
+

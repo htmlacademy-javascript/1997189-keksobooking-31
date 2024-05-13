@@ -85,4 +85,6 @@ export const makeActiveForm = (form,elementsOfForm,additionalFields = []) => {
   mergedArrays.forEach((interactiveElement) => interactiveElement.removeAttribute('disabled'));
 };
 
+export const isEscapeKey = (evt) => evt.key === 'Escape';
+
 export{getRandomInteger,getRandomFractional,getUniqueInteger,getAuthorCount,translateType};
