@@ -12,14 +12,12 @@ const renderPhotos = (arrOfPhotos,elemForRender,elemContainer) => {
 };
 
 const renderFeatures = (listItems,arrOfFeatures) => {
- // if (arrOfFeatures) {
-    listItems.forEach((item) => {
-      const hasFeature = arrOfFeatures.some((feature) => item.classList.contains(`popup__feature--${feature}`));
-      if(!hasFeature) {
-        item.remove();
-      }
-    });
- // }
+  listItems.forEach((item) => {
+    const hasFeature = arrOfFeatures.some((feature) => item.classList.contains(`popup__feature--${feature}`));
+    if(!hasFeature) {
+      item.remove();
+    }
+  });
 };
 
 const hideElement = (field) => {
@@ -28,15 +26,13 @@ const hideElement = (field) => {
 
 const advertisementCardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-const map = document.querySelector('#map-canvas');
+//const map = document.querySelector('#map-canvas');
 
 const createCard = (datum) => {
   const {author,offer} = datum;
   const {title,address,guests,price,rooms,type,checkin,checkout,description,features,photos} = offer;
   const {avatar} = author;
-
-  const fragment = document.createDocumentFragment();
-
+ // const fragment = document.createDocumentFragment();
   const cardElement = advertisementCardTemplate.cloneNode(true);
   const popupTitle = cardElement.querySelector('.popup__title');
   const popupAdress = cardElement.querySelector('.popup__text--address');
@@ -51,8 +47,6 @@ const createCard = (datum) => {
   const popupAvatar = cardElement.querySelector('.popup__avatar');
 
   popupTitle.textContent = title;
-  //console.log(`${offer.address.lat} ${offer.address.lng}`)
-  //popupAdress.textContent = `${address.lat} ${address.lng}`;
   popupAdress.textContent = address;
   popupPrice.textContent = `${price} ₽/ночь`;
   quantityOfGuests.textContent = `${rooms} комнаты для ${guests} гостей`;// КОРРЕКЦИЯ ОКОНЧАНИЙ СУЩЕСТВИТЕЛЬНЫХ!
@@ -87,8 +81,4 @@ const createCard = (datum) => {
   //map.appendChild(fragment);
 };
 
-
-
 export {createCard};
-
-/*/*{author,offer:{title,address,guests,price,rooms,type,checkin,checkout,description,features,photos}}*/

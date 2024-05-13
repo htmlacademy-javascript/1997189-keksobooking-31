@@ -39,8 +39,6 @@ const mainPinMarker = L.marker (START_COORDINATE,
 
 const {lat:latForMainPin,lng:lngForMainPin} = mainPinMarker.getLatLng();
 
-//const baloonCardTemplate = document.querySelector('#card').content.querySelector('.popup');
-
 //Настройки из документации openstreetmap
 const TILE_LAYER = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
@@ -69,7 +67,6 @@ L.tileLayer(TILE_LAYER, {
 export const setStartingAddress = () => {
   address.value = `${latForMainPin},${lngForMainPin}`;
   return address.value;
- // console.log(address.value)
   //address.value = `${cityCenter.lat},${cityCenter.lng}`;
 };
 //присвоение полю адреса изначальных координат
@@ -114,7 +111,6 @@ const createMarker = (datum) => {
   });
   marker.addTo(markerGroup)
     .bindPopup(createCard(datum));
-  //return marker;//зачем здесь ретерн работает без него
 };
 
 export const createMarkers = (data) => {
@@ -129,7 +125,6 @@ btn.addEventListener('click', () => {
   markerGroup.clearLayers();
 });
 
-
+//Возвращение красной метки на место по нажатию на кнопку
 export const returnMarkerToStart = () => mainPinMarker.setLatLng(START_COORDINATE);
-//Возвращение красной метки на место по нажатию на кнопку очистить
 

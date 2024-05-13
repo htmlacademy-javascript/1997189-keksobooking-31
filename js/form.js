@@ -1,27 +1,23 @@
-import {RATIO_ROOMS_GUESTS, RATIO_TYPE_MIN_PRICE,MAX_PRICE_ROOM,ErrorText} from './constants.js';
-//import {getInputValueToSlider} from './slider.js';
-import {returnMarkerToStart,setStartingAddress} from './map';
+import {RATIO_ROOMS_GUESTS, RATIO_TYPE_MIN_PRICE,MAX_PRICE_ROOM} from './constants.js';
+import {returnMarkerToStart,setStartingAddress} from './map.js';
 import {isEscapeKey} from './utils.js';
 import {resetSliderPrice} from './slider.js';
+import {sendData} from './api.js';
+
 const adForm = document.querySelector('.ad-form');//форма 2
 const resetButton = document.querySelector('.ad-form__reset');
-
 const priceInput = adForm.querySelector('#price');
 export const typeInput = adForm.querySelector('#type');
 
 const roomsQuantity = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
-
 const TIMEIN = adForm.querySelector('#timein');
 const TIMEOUT = adForm.querySelector('#timeout');
 const body = document.querySelector('body');
 
-
 const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
 const successMessage = successMessageTemplate.cloneNode(true);
-
 const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
-
 const errorMessageForSending = errorMessageTemplate.cloneNode(true);
 
 const closeSuccessMessage = () => {
@@ -40,7 +36,7 @@ const closeErrorMessageForSending = () => {
   document.removeEventListener('keydown', onDocumentErrorKeyDown);
 };
 
-const showErrorMessageForSending = () => {
+export const showErrorMessageForSending = () => {
   body.append(errorMessageForSending);
   const errorMessageBtn = errorMessageForSending.querySelector('.error__button');
 
@@ -48,7 +44,6 @@ const showErrorMessageForSending = () => {
     errorMessageForSending.remove();
   });
   document.addEventListener('keydown', onDocumentErrorKeyDown);
-
   const errorOverlay = document.querySelector('.error');
   errorOverlay.addEventListener('click',closeErrorMessageForSending);
 };
@@ -59,7 +54,7 @@ function onDocumentErrorKeyDown (evt) {
   }
 }
 
-const showSuccessMessage = () => {
+export const showSuccessMessage = () => {
   body.append(successMessage);
   const successOverlay = document.querySelector('.success');
   successOverlay.addEventListener('click',closeSuccessMessage);
@@ -86,7 +81,7 @@ const addAttributeToPrice = () => {
 };
 
 const errorMessage = (value) => ({
-  minimum: `Стоимость ниже допустимой ${value}`,//откорректировала вывод, работает
+  minimum: `Стоимость ниже допустимой ${value}`,
   maximum: `Не больше ${MAX_PRICE_ROOM}`
 });
 
@@ -161,12 +156,12 @@ const blockSubmitBtn = () => {
   submitBtn.disabled = true;
 };
 
-const unBlockSubmitBtn = () => {
+export const unBlockSubmitBtn = () => {
   submitBtn.disabled = false;
 };
 
 //При успешной отправке формы или её очистке (нажатие на кнопку .ad-form__reset) страница, не перезагружаясь, переходит в состояние
-const resetForm = () => {
+export const resetForm = () => {
   adForm.reset();
   pristine.reset();//В СЛУЧАЕ УДАЧНОЙ ОТПРАВКИ, ЧИСТИМ ПРИСТИН
   returnMarkerToStart();
@@ -188,43 +183,10 @@ resetButton.addEventListener('click',forReset);
 adForm.addEventListener('submit',(evt) => {
   evt.preventDefault();
   const isValid = pristine.validate();
-  //const isValid2 = pristineAvatar.validate();
   if(isValid) {
-    /// if(isValid && isValid2) {
-    console.log('Можно отправлять');
     blockSubmitBtn();
-
     const formData = new FormData(evt.target);
-    fetch(
-      ' https://31.javascript.htmlacademy.pro/keksobooking', //https://31.javascript.htmlacademy.pro/keksobooking
-      {
-        method: 'POST',
-        body: formData,
-      },
-    ).then((response) => {
-      if(response.ok) {
-        resetForm();
-        showSuccessMessage();
-      } else {
-        showErrorMessageForSending();
-        console.log('перехват в ошибке респонс ок');
-        throw new Error(ErrorText.SEND_DATA);
-      }
-    })
-      .catch((err) => {
-        console.log('перехват в catch');
-        throw new Error(err.message);
-      })
-      .finally(() => {
-        unBlockSubmitBtn();
-        console.log('в файнелли');
-      });
+    sendData(formData);
+
   }
 });
-    // blockSubmitBtn();
-    // pristine.reset();//В СЛУЧАЕ УДАЧНОЙ ОТПРАВКИ, ЧИСТИМ ПРИСТИН
-    //pristineAvatar.reset();
-    //adForm.reset();
-
-
-

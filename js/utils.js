@@ -87,4 +87,11 @@ export const makeActiveForm = (form,elementsOfForm,additionalFields = []) => {
 
 export const isEscapeKey = (evt) => evt.key === 'Escape';
 
+const dataErrorTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
+
+const errorMessage = dataErrorTemplate.cloneNode(true);
+export const showDataErrorMessage = () => {
+  document.body.append(errorMessage);
+};
+
 export{getRandomInteger,getRandomFractional,getUniqueInteger,getAuthorCount,translateType};
