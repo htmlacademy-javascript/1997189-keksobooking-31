@@ -1,8 +1,14 @@
-import {RATIO_ROOMS_GUESTS, RATIO_TYPE_MIN_PRICE,MAX_PRICE_ROOM} from './constants.js';
+import {RATIO_ROOMS_GUESTS, RATIO_TYPE_MIN_PRICE,MAX_PRICE_ROOM,ErrorText} from './constants.js';
 import {returnMarkerToStart,setStartingAddress} from './map.js';
-import {isEscapeKey} from './utils.js';
+import {isEscapeKey,makeActiveForm} from './utils.js';
 import {resetSliderPrice} from './slider.js';
 import {sendData} from './api.js';
+
+const mapFeaturesElem = [...document.querySelectorAll('.map__filters fieldset')];//филдсет в форме 1 чекбоксы
+const mapFiltersForm = document.querySelector('.map__filters');//форма1
+const mapFilterInteractiveElements = [...document.querySelectorAll('.map__filters select')];//все селекты форма 1
+
+// import {showSuccessMessage,resetForm,showErrorMessageForSending,unBlockSubmitBtn} from './form.js';
 
 const adForm = document.querySelector('.ad-form');//форма 2
 const resetButton = document.querySelector('.ad-form__reset');
@@ -167,18 +173,28 @@ export const resetForm = () => {
   returnMarkerToStart();
   resetSliderPrice();
   setStartingAddress();
-
   // все заполненные поля возвращаются в изначальное состояние;
   // фильтрация (состояние фильтров и отфильтрованные метки) сбрасывается;???
   // метка адреса возвращается в исходное положение;
   // значение поля адреса корректируется соответственно исходному положению метки;
   // если на карте был показан балун, то он должен быть скрыт.???
 };
-const forReset = () => {
+const onResetBtn = (e) => {
+  e.preventDefault();
   resetForm();
 
 };
-resetButton.addEventListener('click',forReset);
+resetButton.addEventListener('click',onResetBtn);
+
+// adForm.addEventListener('submit',(evt) => {
+//   evt.preventDefault();
+//   const isValid = pristine.validate();
+//   if(isValid) {
+//     blockSubmitBtn();
+//     const formData = new FormData(evt.target);
+//     sendData(formData);
+//   }
+// });
 
 adForm.addEventListener('submit',(evt) => {
   evt.preventDefault();
@@ -186,7 +202,20 @@ adForm.addEventListener('submit',(evt) => {
   if(isValid) {
     blockSubmitBtn();
     const formData = new FormData(evt.target);
-    sendData(formData);
 
+    sendData(formData)
+      .then(() => {
+        resetForm();
+        showSuccessMessage();
+        makeActiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);
+      })
+      .catch(() => {
+        //throw new Error(err.message);
+        showErrorMessageForSending();
+        throw new Error(ErrorText.SEND_DATA);
+      })
+      .finally(() => {
+        unBlockSubmitBtn();
+      });
   }
 });

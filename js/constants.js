@@ -40,9 +40,15 @@ export const RATIO_TYPE_MIN_PRICE = {
 export const MAX_PRICE_ROOM = 100000;
 
 export const BASE_URL = 'https://31.javascript.htmlacademy.pro/keksobooking';
+
 export const Route = {
   GET_DATA: '/data',
   SEND_DATA: '/',
+};
+
+export const Method = {
+  GET: 'GET',
+  POST: 'POST',
 };
 
 export const ErrorText = {
