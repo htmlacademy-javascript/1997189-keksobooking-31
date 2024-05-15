@@ -207,7 +207,7 @@ adForm.addEventListener('submit',(evt) => {
       .then(() => {
         resetForm();
         showSuccessMessage();
-        makeActiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);
+        makeActiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);//Передаем ФОРМу1 КУДА ПОСТАВИТЬ АКТИВАЦИЮ ФОРМЫ? ТРЕТИМ ПАРАМЕТРОМ ИЛИ УБРАТЬ ОТСЮДА ВООБЩЕ?
       })
       .catch(() => {
         //throw new Error(err.message);

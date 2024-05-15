@@ -1,16 +1,19 @@
-import {ErrorText,BASE_URL,Method,Route} from './constants.js';
 
+import {ErrorText,BASE_URL,Method,Route} from './constants.js';
+import {showSuccessMessage,resetForm,showErrorMessageForSending,unBlockSubmitBtn} from './form.js';
 
 const load = (route, errorText, method = Method.GET, body = null) =>
   fetch(`${BASE_URL}${route}`, {method, body})
     .then((response) => {
       if (!response.ok) {
+        console.log('в ноу респонс');
         throw new Error(errorText);
       }
       console.log('в респонс');
       return response.json();
     })
     .catch(() => {
+      console.log('в кетч')
       throw new Error(errorText);
     });
 
@@ -18,19 +21,6 @@ export const getData = () => load(Route.GET_DATA, ErrorText.GET_DATA);
 
 export const sendData = (body) => load(Route.SEND_DATA, ErrorText.SEND_DATA, Method.POST, body);
 
-
-
-
-
-
-
-
-
-
-
-
-
-// import {showSuccessMessage,resetForm,showErrorMessageForSending,unBlockSubmitBtn} from './form.js';
 // export const sendData = (body) => {
 //   fetch(
 //     `${BASE_URL}${Route.SEND_DATA}`,
