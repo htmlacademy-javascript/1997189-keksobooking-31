@@ -48,29 +48,6 @@ const translateType = (type) => {
   }
 };
 
-// const getAuthorCount = () => {
-//   let count = 0;
-//   return function () {
-//     count ++;
-//     if (count < MAX_AUTHOR_QUANTITY) {
-//       return `0${count}`;
-//     }
-//     return count;
-//   };
-// };
-
-const getAuthorCount = () => {
-  let count = 0;
-  return function () {
-    count ++;
-    //if (MAX_AUTHOR_QUANTITY.length === 2) {
-    return count.toString().padStart(2,'0');
-    //}
-    //return count;
-  };
-};
-/*Функция padStart достаточно умна, мы ей первым параметром кормим ту длину строки, которую хотим получить, и если она уже такая - нули доставляться не будут.  Поэтому тут можно убить двух зайцев одним махом, убрав при этом if проверку http://joxi.ru/Vm64GRztz37L1A - так вы всегда будете получать строку, проблемы начнутся только если пойдут трехзначные числа, но тут мы точно знаем, что это не наш случай.*/
-
 export const makeInactiveForm = (form,elementsOfForm,additionalFields = []) => {
   form.classList.add('ad-form--disabled');
   const mergedArrays = [...elementsOfForm,...additionalFields];
@@ -94,4 +71,4 @@ export const showDataErrorMessage = () => {
   document.body.append(errorMessage);
 };
 
-export{getRandomInteger,getRandomFractional,getUniqueInteger,getAuthorCount,translateType};
+export{getRandomInteger,getRandomFractional,getUniqueInteger,translateType};

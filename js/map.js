@@ -114,7 +114,7 @@ const createMarker = (datum) => {
 };
 
 export const createMarkers = (data) => {
-
+/*ЗДЕСЬ НУЖНО ПО ДЕСЯТЬ ПОКАЗЫВАТЬ???*/
   data.forEach((datum) => {
     createMarker(datum);
   });

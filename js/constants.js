@@ -56,4 +56,10 @@ export const ErrorText = {
   SEND_DATA: 'Не удалось отправить форму. Попробуйте ещё раз',
 };
 
+export const PRICE = {
+  'any' : {min: 0, max: 100000},
+  'low' : {min: 0, max: 10000},
+  'middle' : {min: 10000, max: 50000},
+  'high' : {min: 50000, max: 100000},
+};
 
