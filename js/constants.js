@@ -5,6 +5,8 @@ export const MAX_LATITUDE = 35.70000;
 export const MIN_LONGITUDE = 139.70000;
 export const MAX_LONGITUDE = 139.80000;
 
+export const MAX_QUANTITY_ADVERTISEMENTS = 10;
+
 export const TYPE = [
   'palace',
   'flat',

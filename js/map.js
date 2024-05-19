@@ -7,7 +7,6 @@ const mapFeaturesElem = [...document.querySelectorAll('.map__filters fieldset')]
 const setOfAdFormInteractiveElements = [...document.querySelectorAll('.ad-form fieldset')];//все филдсеты в форме 2
 const adForm = document.querySelector('.ad-form');//форма 2
 
-
 const address = adForm.querySelector('#address');
 const START_COORDINATE = {
   lat: 35.68948,
@@ -97,7 +96,7 @@ const pinIcons = L.icon({
   iconSize: [pinIconsConfig.width, pinIconsConfig.height],
   iconAnchor: [pinIconsConfig.anchorX, pinIconsConfig.anchorY],
 });
-const markerGroup = L.layerGroup().addTo(map);
+export const markerGroup = L.layerGroup().addTo(map);
 
 const createMarker = (datum) => {
   const {lat,lng} = datum.location;
@@ -113,9 +112,8 @@ const createMarker = (datum) => {
     .bindPopup(createCard(datum));
 };
 
-export const createMarkers = (data) => {
-/*ЗДЕСЬ НУЖНО ПО ДЕСЯТЬ ПОКАЗЫВАТЬ???*/
-  data.forEach((datum) => {
+export const createMarkers = (data,maxQuantity) => {
+  data.slice(0,maxQuantity).forEach((datum) => {
     createMarker(datum);
   });
 

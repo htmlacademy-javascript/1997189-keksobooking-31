@@ -1,7 +1,7 @@
 import {getData} from './api.js';
-import {createMarkers} from './map.js';
+//import {createMarkers} from './map.js';
 import {showDataErrorMessage,makeActiveForm} from './utils.js';
-import {filterByType,filterByPrice,filterByRooms,filterCards} from './filters.js';
+import {filterCards} from './filters.js';
 import './filters.js';
 
 
@@ -10,14 +10,11 @@ const mapFiltersForm = document.querySelector('.map__filters');//форма1
 const mapFilterInteractiveElements = [...document.querySelectorAll('.map__filters select')];//все селекты форма 1
 
 
-getData(createMarkers,showDataErrorMessage)
+getData(showDataErrorMessage)
   .then((cards) => {
     console.log(cards);
     makeActiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);
-    createMarkers(cards);
-    filterByType(cards);
-    filterByPrice(cards)
-    filterCards(cards)
+    filterCards(cards);
   })
   .catch(() => {
     showDataErrorMessage();
