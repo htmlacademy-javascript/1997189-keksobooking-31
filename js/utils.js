@@ -1,4 +1,4 @@
-import{MAX_AUTHOR_QUANTITY} from './constants.js';
+//import{MAX_AUTHOR_QUANTITY} from './constants.js';
 
 const getRandomInteger = (min,max) => {
   const lower = Math.ceil(Math.min(Math.abs(min),Math.abs(max)));
@@ -29,7 +29,6 @@ const getUniqueInteger = (min,max) => {
     return randomInteger;
   };
 };
-
 
 const translateType = (type) => {
   switch (type) {
@@ -78,5 +77,15 @@ export function debounce (callback, timeoutDelay = 500) {
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
 }
+
+// export const resetPhotoSrc = function (element) {
+//   element.src = 'img/muffin-grey.svg';
+// };
+
+export const resetAllPhotosSrc = (...allPhotos) => {
+  allPhotos.forEach((photo) => {
+    photo.src = 'img/muffin-grey.svg';
+  });
+};
 
 export{getRandomInteger,getRandomFractional,getUniqueInteger,translateType};

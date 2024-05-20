@@ -65,3 +65,4 @@ export const PRICE = {
   'high' : {min: 50000, max: 100000},
 };
 
+export const FILE_TYPES = ['jpg', 'jpeg', 'png'];

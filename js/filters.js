@@ -6,8 +6,6 @@ const fieldType = document.querySelector('#housing-type');
 const fieldPrice = document.querySelector('#housing-price');
 const fieldRooms = document.querySelector('#housing-rooms');
 const fieldQuests = document.querySelector('#housing-guests');
-const fieldFeatures = document.querySelector('#housing-features');
-
 
 const filterForm = document.querySelector('.map__filters');
 

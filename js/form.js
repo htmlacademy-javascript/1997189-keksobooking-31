@@ -1,8 +1,10 @@
-import {RATIO_ROOMS_GUESTS, RATIO_TYPE_MIN_PRICE,MAX_PRICE_ROOM,ErrorText} from './constants.js';
+import {RATIO_ROOMS_GUESTS, RATIO_TYPE_MIN_PRICE,MAX_PRICE_ROOM,ErrorText,FILE_TYPES} from './constants.js';
 import {returnMarkerToStart,setStartingAddress} from './map.js';
-import {isEscapeKey,makeActiveForm} from './utils.js';
+import {isEscapeKey,makeActiveForm,resetAllPhotosSrc} from './utils.js';
 import {resetSliderPrice} from './slider.js';
 import {sendData} from './api.js';
+import {avatarPreview} from './avatar.js';
+
 
 const mapFeaturesElem = [...document.querySelectorAll('.map__filters fieldset')];//филдсет в форме 1 чекбоксы
 const mapFiltersForm = document.querySelector('.map__filters');//форма1
@@ -15,6 +17,27 @@ const resetButton = document.querySelector('.ad-form__reset');
 const priceInput = adForm.querySelector('#price');
 export const typeInput = adForm.querySelector('#type');
 
+const advertisementPhotoInput = adForm.querySelector('#images');
+
+const adFormPhoto = adForm.querySelector('.ad-form__photo');
+
+const advertisementPhotoImg = document.createElement('img');
+advertisementPhotoImg.className = 'ad-form__img';
+advertisementPhotoImg.alt = 'Фотография жилья';
+advertisementPhotoImg.width = '70';
+advertisementPhotoImg.height = '70';
+
+adFormPhoto.append(advertisementPhotoImg);
+
+advertisementPhotoInput.addEventListener('change',() => {
+  const file = advertisementPhotoInput.files[0];
+  const fileName = file.name;
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+  if(matches) {
+    advertisementPhotoImg.src = URL.createObjectURL(file);
+  }
+});
+
 const roomsQuantity = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
 const TIMEIN = adForm.querySelector('#timein');
@@ -25,6 +48,7 @@ const successMessageTemplate = document.querySelector('#success').content.queryS
 const successMessage = successMessageTemplate.cloneNode(true);
 const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
 const errorMessageForSending = errorMessageTemplate.cloneNode(true);
+
 
 const closeSuccessMessage = () => {
   successMessage.remove();
@@ -173,6 +197,8 @@ export const resetForm = () => {
   returnMarkerToStart();
   resetSliderPrice();
   setStartingAddress();
+  resetAllPhotosSrc(avatarPreview,advertisementPhotoImg);
+
   // все заполненные поля возвращаются в изначальное состояние;
   // фильтрация (состояние фильтров и отфильтрованные метки) сбрасывается;???
   // метка адреса возвращается в исходное положение;
@@ -185,16 +211,6 @@ const onResetBtn = (e) => {
 
 };
 resetButton.addEventListener('click',onResetBtn);
-
-// adForm.addEventListener('submit',(evt) => {
-//   evt.preventDefault();
-//   const isValid = pristine.validate();
-//   if(isValid) {
-//     blockSubmitBtn();
-//     const formData = new FormData(evt.target);
-//     sendData(formData);
-//   }
-// });
 
 adForm.addEventListener('submit',(evt) => {
   evt.preventDefault();

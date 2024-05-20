@@ -350,6 +350,11 @@ fieldset {
           box-shadow: 0 0 2px 2px #ff6547;
 }
 
+.ad-form__img {
+  display: block;
+  width: 100%;
+}
+
 .ad-form__element {
   -ms-flex-preferred-size: 25%;
       flex-basis: 25%;

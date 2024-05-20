@@ -32,7 +32,7 @@ const createCard = (datum) => {
   const {author,offer} = datum;
   const {title,address,guests,price,rooms,type,checkin,checkout,description,features,photos} = offer;
   const {avatar} = author;
- // const fragment = document.createDocumentFragment();
+  // const fragment = document.createDocumentFragment();
   const cardElement = advertisementCardTemplate.cloneNode(true);
   const popupTitle = cardElement.querySelector('.popup__title');
   const popupAdress = cardElement.querySelector('.popup__text--address');

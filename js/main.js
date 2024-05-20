@@ -2,7 +2,7 @@ import {getData} from './api.js';
 //import {createMarkers} from './map.js';
 import {showDataErrorMessage,makeActiveForm} from './utils.js';
 import {filterCards} from './filters.js';
-import './filters.js';
+import './avatar.js';
 
 
 const mapFeaturesElem = [...document.querySelectorAll('.map__filters fieldset')];//филдсет в форме 1 чекбоксы
@@ -19,7 +19,3 @@ getData(showDataErrorMessage)
   .catch(() => {
     showDataErrorMessage();
   });
-
-// getData((cards) => {
-//   createMarkers(cards);
-// },showDataErrorMessage);
