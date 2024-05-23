@@ -74,7 +74,10 @@ export function debounce (callback, timeoutDelay = 500) {
   let timeoutId;
   return (...rest) => {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+    timeoutId = setTimeout(() => {
+      console.log('сработал дебаунс');
+      callback.apply(this, rest);
+    }, timeoutDelay);
   };
 }
 

@@ -53,7 +53,7 @@ makeInactiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);//
 makeInactiveForm(adForm,setOfAdFormInteractiveElements);//Передаем ФОРМу 2
 
 //создаем объект карты, в него передаем элемент map-canvas, куда нужно поместить карту, координаты
-const map = L.map('map-canvas')
+export const map = L.map('map-canvas')
   .on('load',() => {
 
     makeActiveForm(adForm,setOfAdFormInteractiveElements);//Передаем ФОРМу 2
@@ -91,9 +91,6 @@ const pinIconsConfig = {
   anchorY: 40,
 };
 
-const popuploseButton = document.querySelector('.close__popup');
-
-
 const pinIcons = L.icon({
   iconUrl: pinIconsConfig.url,
   iconSize: [pinIconsConfig.width, pinIconsConfig.height],
@@ -101,11 +98,8 @@ const pinIcons = L.icon({
 });
 export const markerGroup = L.layerGroup().addTo(map);
 
-
-
-const createMarker = (datum) => {
+export const createMarker = (datum) => {
   const {lat,lng} = datum.location;
-
   const marker = L.marker({
     lat,
     lng,
@@ -115,12 +109,6 @@ const createMarker = (datum) => {
   });
   marker.addTo(markerGroup)
     .bindPopup(createCard(datum));
-  //.closePopup();
-  // const closeBaloon = marker.closePopup.bind(marker);
-
-  popuploseButton.addEventListener('click', () => {
-    marker.closePopup();
-  });
 };
 
 export const createMarkers = (data,maxQuantity) => {

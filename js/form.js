@@ -1,10 +1,10 @@
 import {RATIO_ROOMS_GUESTS, RATIO_TYPE_MIN_PRICE,MAX_PRICE_ROOM,ErrorText,FILE_TYPES} from './constants.js';
-import {returnMarkerToStart,setStartingAddress,returnMapToInitialState} from './map.js';
+import {returnMarkerToStart,setStartingAddress,returnMapToInitialState,map,createMarker} from './map.js';
 import {isEscapeKey,makeActiveForm,resetPhotoSrc} from './utils.js';
 import {resetSliderPrice} from './slider.js';
 import {sendData} from './api.js';
 import {avatarPreview} from './avatar.js';
-import {resetFilterForm} from './filters.js';
+import {resetFilterForm,localData} from './filters.js';
 
 const filterForm = document.querySelector('.map__filters');
 
@@ -22,6 +22,7 @@ export const typeInput = adForm.querySelector('#type');
 const advertisementPhotoInput = adForm.querySelector('#images');
 
 const adFormPhoto = adForm.querySelector('.ad-form__photo');
+
 
 // const advertisementPhotoImg = document.createElement('img');
 // advertisementPhotoImg.className = 'ad-form__img';
@@ -202,7 +203,7 @@ export const resetForm = () => {
   setStartingAddress();
   resetPhotoSrc(avatarPreview);
   resetPhotoSrc(adFormPhoto);
-  //marker.closePopup();
+  map.closePopup();
 
   // все заполненные поля возвращаются в изначальное состояние;
   // фильтрация (состояние фильтров и отфильтрованные метки) сбрасывается;???
@@ -218,6 +219,12 @@ const onResetBtn = (e) => {
 };
 resetButton.addEventListener('click',onResetBtn);
 
+export const showInitialCards = (cards) => {
+  cards.forEach((card) => {
+    createMarker(card);
+  });
+};
+
 adForm.addEventListener('submit',(evt) => {
   evt.preventDefault();
   const isValid = pristine.validate();
@@ -227,13 +234,14 @@ adForm.addEventListener('submit',(evt) => {
 
     sendData(formData)
       .then(() => {
-        console.log('в then')
         resetForm();
         filterForm.reset();
         returnMarkerToStart();
         returnMapToInitialState();
         //resetFilterForm();
         showSuccessMessage();
+        map.closePopup();
+        showInitialCards(localData);
         makeActiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);//Передаем ФОРМу1 КУДА ПОСТАВИТЬ АКТИВАЦИЮ ФОРМЫ? ТРЕТИМ ПАРАМЕТРОМ ИЛИ УБРАТЬ ОТСЮДА ВООБЩЕ?
 
       })

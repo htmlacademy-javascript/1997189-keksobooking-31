@@ -10,6 +10,9 @@ const mapFiltersForm = document.querySelector('.map__filters');//форма1
 const mapFilterInteractiveElements = [...document.querySelectorAll('.map__filters select')];//все селекты форма 1
 
 
+
+console.log(L)
+
 getData(showDataErrorMessage)
   .then((cards) => {
     console.log(cards);

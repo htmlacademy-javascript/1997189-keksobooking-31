@@ -1,5 +1,5 @@
 import {PRICE,MAX_QUANTITY_ADVERTISEMENTS} from './constants.js';
-import {createMarkers,markerGroup} from './map.js';
+import {createMarkers,markerGroup,createMarker} from './map.js';
 import {debounce} from './utils.js';
 import {returnMarkerToStart,returnMapToInitialState} from './map.js';
 
@@ -19,7 +19,6 @@ export const resetFilterForm = (obj,maxQuantity) => {
   filterForm.reset();
   returnMarkerToStart();
   returnMapToInitialState();
-  console.log(obj)
   createMarkers(obj,maxQuantity);//добавила отрисовку маркеров в функцию сброса фильтров
 };
 
@@ -38,9 +37,11 @@ const filterAdvertisementCards = (cards,features) => {
   return newArr;
 };
 
+export const localData = [];
+
 export const showCards = (cards) => {
+  localData.push(...cards.slice(0,10));
   resetFilterForm(cards,MAX_QUANTITY_ADVERTISEMENTS);//добавила отрисовку маркеров в функцию сброса фильтров
-  console.log(cards,MAX_QUANTITY_ADVERTISEMENTS)
 
   filterForm.addEventListener('change',() => {
     const checkedFeatures = makeArrayFromFeatures();
@@ -49,17 +50,3 @@ export const showCards = (cards) => {
     debounceFunction();
   });
 };
- // const debounceFunction = (debounce(() => createMarkers(newArr,MAX_QUANTITY_ADVERTISEMENTS),1000));
-
- // const clearCreateMarkers = () => {
-    //   markerGroup.clearLayers();
-    //   createMarkers(newArr,MAX_QUANTITY_ADVERTISEMENTS)
-    // };
-  //  console.log(MAX_QUANTITY_ADVERTISEMENTS)
-   // clearCreateMarkers(newArr,MAX_QUANTITY_ADVERTISEMENTS);
-// const newArr = cards
-    //   .filter((card) => fieldType.children[0].selected || card.offer.type === fieldType.value)
-    //   .filter((card) => fieldPrice.children[0].selected || (card.offer.price >= PRICE[fieldPrice.value].min) && (card.offer?.price <= PRICE[fieldPrice.value].max))
-    //   .filter((card) => fieldRooms.children[0].selected || card.offer.rooms === Number(fieldRooms.value))
-    //   .filter((card) => fieldQuests.children[0].selected || card.offer.guests === Number(fieldQuests.value))
-    //   .filter((card) => checkedFeatures.every((feature) => card.offer.features?.includes(feature)));
