@@ -49,7 +49,7 @@ export const showCards = (cards) => {
     // const debounceFunction = (debounce(() => clearCreateMarkers(filteredCards,MAX_QUANTITY_ADVERTISEMENTS),1000));
     // debounceFunction();
 
-    const throttleFunction = (throttle(() => clearCreateMarkers(filteredCards,MAX_QUANTITY_ADVERTISEMENTS),2000));
+    const throttleFunction = (throttle(() => clearCreateMarkers(filteredCards,MAX_QUANTITY_ADVERTISEMENTS),10000));
     throttleFunction();
   });
 };

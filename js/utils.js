@@ -94,6 +94,7 @@ export function throttle (callback, delayBetweenFrames) {
     // Если время между кадрами больше задержки,
     // вызываем наш колбэк и перезаписываем lastTime
     // временем "последнего кадра"
+    console.log('время меньше задержки')
     if (now - lastTime >= delayBetweenFrames) {
       console.log(now - lastTime)
       console.log(delayBetweenFrames)
