@@ -1,6 +1,6 @@
 import {PRICE,MAX_QUANTITY_ADVERTISEMENTS} from './constants.js';
 import {createMarkers,markerGroup,createMarker} from './map.js';
-import {debounce} from './utils.js';
+import {debounce,throttle} from './utils.js';
 import {returnMarkerToStart,returnMapToInitialState} from './map.js';
 
 const fieldType = document.querySelector('#housing-type');
@@ -46,7 +46,10 @@ export const showCards = (cards) => {
   filterForm.addEventListener('change',() => {
     const checkedFeatures = makeArrayFromFeatures();
     const filteredCards = filterAdvertisementCards(cards,checkedFeatures);
-    const debounceFunction = (debounce(() => clearCreateMarkers(filteredCards,MAX_QUANTITY_ADVERTISEMENTS),1000));
-    debounceFunction();
+    // const debounceFunction = (debounce(() => clearCreateMarkers(filteredCards,MAX_QUANTITY_ADVERTISEMENTS),1000));
+    // debounceFunction();
+
+    const throttleFunction = (throttle(() => clearCreateMarkers(filteredCards,MAX_QUANTITY_ADVERTISEMENTS),2000));
+    throttleFunction();
   });
 };
