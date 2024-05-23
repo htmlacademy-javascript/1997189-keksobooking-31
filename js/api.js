@@ -6,11 +6,13 @@ const load = (route, errorText, method = Method.GET, body = null) =>
   fetch(`${BASE_URL}${route}`, {method, body})
     .then((response) => {
       if (!response.ok) {
+        console.log('респонс не ок')
         throw new Error(errorText);
       }
       return response.json();
     })
     .catch(() => {
+    console.log('кетч в апи')
       throw new Error(errorText);
     });
 

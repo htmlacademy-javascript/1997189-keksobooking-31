@@ -91,12 +91,17 @@ const pinIconsConfig = {
   anchorY: 40,
 };
 
+const popuploseButton = document.querySelector('.close__popup');
+
+
 const pinIcons = L.icon({
   iconUrl: pinIconsConfig.url,
   iconSize: [pinIconsConfig.width, pinIconsConfig.height],
   iconAnchor: [pinIconsConfig.anchorX, pinIconsConfig.anchorY],
 });
 export const markerGroup = L.layerGroup().addTo(map);
+
+
 
 const createMarker = (datum) => {
   const {lat,lng} = datum.location;
@@ -110,6 +115,12 @@ const createMarker = (datum) => {
   });
   marker.addTo(markerGroup)
     .bindPopup(createCard(datum));
+  //.closePopup();
+  // const closeBaloon = marker.closePopup.bind(marker);
+
+  popuploseButton.addEventListener('click', () => {
+    marker.closePopup();
+  });
 };
 
 export const createMarkers = (data,maxQuantity) => {
@@ -118,11 +129,10 @@ export const createMarkers = (data,maxQuantity) => {
   });
 
 };
-const btn = document.querySelector('.btn');
-btn.addEventListener('click', () => {
-  markerGroup.clearLayers();
-});
 
+//ПОДУМАТЬ ОБ ОБЪЕДИНЕНИИ
 //Возвращение красной метки на место по нажатию на кнопку
 export const returnMarkerToStart = () => mainPinMarker.setLatLng(START_COORDINATE);
+//Возвр карты к нач сост
+export const returnMapToInitialState = () => map.setView(START_COORDINATE, ZOOM);
 

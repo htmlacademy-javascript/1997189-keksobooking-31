@@ -78,14 +78,19 @@ export function debounce (callback, timeoutDelay = 500) {
   };
 }
 
-// export const resetPhotoSrc = function (element) {
-//   element.src = 'img/muffin-grey.svg';
-// };
-
-export const resetAllPhotosSrc = (...allPhotos) => {
-  allPhotos.forEach((photo) => {
-    photo.src = 'img/muffin-grey.svg';
-  });
+export const resetPhotoSrc = function (element) {
+  if(element.src) {
+    element.src = 'img/muffin-grey.svg';
+  } else {
+    element.style.backgroundImage = '';
+  }
+  // element.src ? 'img/muffin-grey.svg' : element.style.backgroundImage = ;
 };
+
+// export const resetAllPhotosSrc = (...allPhotos) => {
+//   allPhotos.forEach((photo) => {
+//     photo.src = 'img/muffin-grey.svg';
+//   });
+// };
 
 export{getRandomInteger,getRandomFractional,getUniqueInteger,translateType};

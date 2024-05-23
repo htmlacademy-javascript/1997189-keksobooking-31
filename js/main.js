@@ -1,7 +1,7 @@
 import {getData} from './api.js';
 //import {createMarkers} from './map.js';
 import {showDataErrorMessage,makeActiveForm} from './utils.js';
-import {filterCards} from './filters.js';
+import {showCards} from './filters.js';
 import './avatar.js';
 
 
@@ -14,7 +14,7 @@ getData(showDataErrorMessage)
   .then((cards) => {
     console.log(cards);
     makeActiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);
-    filterCards(cards);
+    showCards(cards);
   })
   .catch(() => {
     showDataErrorMessage();

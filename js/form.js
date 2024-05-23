@@ -1,10 +1,12 @@
 import {RATIO_ROOMS_GUESTS, RATIO_TYPE_MIN_PRICE,MAX_PRICE_ROOM,ErrorText,FILE_TYPES} from './constants.js';
-import {returnMarkerToStart,setStartingAddress} from './map.js';
-import {isEscapeKey,makeActiveForm,resetAllPhotosSrc} from './utils.js';
+import {returnMarkerToStart,setStartingAddress,returnMapToInitialState} from './map.js';
+import {isEscapeKey,makeActiveForm,resetPhotoSrc} from './utils.js';
 import {resetSliderPrice} from './slider.js';
 import {sendData} from './api.js';
 import {avatarPreview} from './avatar.js';
+import {resetFilterForm} from './filters.js';
 
+const filterForm = document.querySelector('.map__filters');
 
 const mapFeaturesElem = [...document.querySelectorAll('.map__filters fieldset')];//филдсет в форме 1 чекбоксы
 const mapFiltersForm = document.querySelector('.map__filters');//форма1
@@ -21,20 +23,20 @@ const advertisementPhotoInput = adForm.querySelector('#images');
 
 const adFormPhoto = adForm.querySelector('.ad-form__photo');
 
-const advertisementPhotoImg = document.createElement('img');
-advertisementPhotoImg.className = 'ad-form__img';
-advertisementPhotoImg.alt = 'Фотография жилья';
-advertisementPhotoImg.width = '70';
-advertisementPhotoImg.height = '70';
+// const advertisementPhotoImg = document.createElement('img');
+// advertisementPhotoImg.className = 'ad-form__img';
+// advertisementPhotoImg.alt = 'Фотография жилья';
+// advertisementPhotoImg.width = '70';
+// advertisementPhotoImg.height = '70';
 
-adFormPhoto.append(advertisementPhotoImg);
+// adFormPhoto.append(advertisementPhotoImg);
 
 advertisementPhotoInput.addEventListener('change',() => {
   const file = advertisementPhotoInput.files[0];
   const fileName = file.name;
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
   if(matches) {
-    advertisementPhotoImg.src = URL.createObjectURL(file);
+    adFormPhoto.style.backgroundImage = `url(${URL.createObjectURL(file)})`;
   }
 });
 
@@ -195,9 +197,12 @@ export const resetForm = () => {
   adForm.reset();
   pristine.reset();//В СЛУЧАЕ УДАЧНОЙ ОТПРАВКИ, ЧИСТИМ ПРИСТИН
   returnMarkerToStart();
+  returnMapToInitialState();
   resetSliderPrice();
   setStartingAddress();
-  resetAllPhotosSrc(avatarPreview,advertisementPhotoImg);
+  resetPhotoSrc(avatarPreview);
+  resetPhotoSrc(adFormPhoto);
+  //marker.closePopup();
 
   // все заполненные поля возвращаются в изначальное состояние;
   // фильтрация (состояние фильтров и отфильтрованные метки) сбрасывается;???
@@ -208,7 +213,8 @@ export const resetForm = () => {
 const onResetBtn = (e) => {
   e.preventDefault();
   resetForm();
-
+  resetFilterForm();
+  console.log('tet')
 };
 resetButton.addEventListener('click',onResetBtn);
 
@@ -221,13 +227,20 @@ adForm.addEventListener('submit',(evt) => {
 
     sendData(formData)
       .then(() => {
+        console.log('в then')
         resetForm();
+        filterForm.reset();
+        returnMarkerToStart();
+        returnMapToInitialState();
+        //resetFilterForm();
         showSuccessMessage();
         makeActiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);//Передаем ФОРМу1 КУДА ПОСТАВИТЬ АКТИВАЦИЮ ФОРМЫ? ТРЕТИМ ПАРАМЕТРОМ ИЛИ УБРАТЬ ОТСЮДА ВООБЩЕ?
+
       })
       .catch(() => {
         //throw new Error(err.message);
         showErrorMessageForSending();
+        console.log('в кетч')
         throw new Error(ErrorText.SEND_DATA);
       })
       .finally(() => {
