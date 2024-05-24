@@ -2,7 +2,7 @@ import {FILE_TYPES} from './constants.js';
 
 const avatarInput = document.querySelector('#avatar');
 
-export const avatarPreview = document.querySelector('.ad-form-header__preview img');
+const avatarPreview = document.querySelector('.ad-form-header__preview img');
 
 avatarInput.addEventListener('change',() => {
   const file = avatarInput.files[0];
@@ -12,3 +12,5 @@ avatarInput.addEventListener('change',() => {
     avatarPreview.src = URL.createObjectURL(file);
   }
 });
+
+export {avatarPreview};

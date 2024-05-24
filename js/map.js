@@ -1,14 +1,25 @@
 import {makeInactiveForm,makeActiveForm} from './utils.js';
 import {createCard} from './generate-cards.js';
-const mapFiltersForm = document.querySelector('.map__filters');//форма1
-const mapFilterInteractiveElements = [...document.querySelectorAll('.map__filters select')];//все селекты форма 1
-const mapFeaturesElem = [...document.querySelectorAll('.map__filters fieldset')];//филдсет в форме 1 чекбоксы
-//const adForm = document.querySelector('.ad-form');//форма 2
-const setOfAdFormInteractiveElements = [...document.querySelectorAll('.ad-form fieldset')];//все филдсеты в форме 2
-const adForm = document.querySelector('.ad-form');//форма 2
 
+const mapFiltersForm = document.querySelector('.map__filters');
+const mapFilterInteractiveElements = [...document.querySelectorAll('.map__filters select')];
+const mapFeaturesElem = [...document.querySelectorAll('.map__filters fieldset')];
+
+const setOfAdFormInteractiveElements = [...document.querySelectorAll('.ad-form fieldset')];
+const adForm = document.querySelector('.ad-form');
 const address = adForm.querySelector('#address');
+
 const START_COORDINATE = {
+  lat: 35.68948,
+  lng: 139.69170,
+};
+
+const TILE_LAYER = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+const ZOOM = 10;
+
+const cityCenter = {
   lat: 35.68948,
   lng: 139.69170,
 };
@@ -27,60 +38,41 @@ const mainPinIcon = L.icon({
   iconAnchor: [mainIconConfig.anchorX, mainIconConfig.anchorY],
 });
 
-
-//создаем маркер; указываем старт координат
 const mainPinMarker = L.marker (START_COORDINATE,
   {
-    draggable: true,//маркер перемещаем
+    draggable: true,
     icon: mainPinIcon,
   },
 );
 
 const {lat:latForMainPin,lng:lngForMainPin} = mainPinMarker.getLatLng();
 
-//Настройки из документации openstreetmap
-const TILE_LAYER = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-//ЗУМ
-const ZOOM = 10;
+makeInactiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);
+makeInactiveForm(adForm,setOfAdFormInteractiveElements);
 
-//КООРДИНАТЫ ЦЕНТРА ТОКИО
-const cityCenter = {
-  lat: 35.68948,
-  lng: 139.69170,
-};
-makeInactiveForm(mapFiltersForm,mapFilterInteractiveElements,mapFeaturesElem);//Передаем ФОРМу1
-makeInactiveForm(adForm,setOfAdFormInteractiveElements);//Передаем ФОРМу 2
-
-//создаем объект карты, в него передаем элемент map-canvas, куда нужно поместить карту, координаты
-export const map = L.map('map-canvas')
+const map = L.map('map-canvas')
   .on('load',() => {
-
     makeActiveForm(adForm,setOfAdFormInteractiveElements);//Передаем ФОРМу 2
   })
   .setView(cityCenter,ZOOM);
 L.tileLayer(TILE_LAYER, {
   attribution: COPYRIGHT
-}).addTo(map);//метод для добавления всего, что насоздовалось в OpenStreetMap в нашу оболочку для карты Leaflet
+}).addTo(map);
 
-export const setStartingAddress = () => {
+const setStartingAddress = () => {
   address.value = `${latForMainPin},${lngForMainPin}`;
   return address.value;
-  //address.value = `${cityCenter.lat},${cityCenter.lng}`;
 };
-//присвоение полю адреса изначальных координат
+
 setStartingAddress();
 
-mainPinMarker.addTo(map);//доб маркер на карту
+mainPinMarker.addTo(map);
 
-//конечные Координаты перемещенной мыши
-//координаты нужно привести к числу?
 mainPinMarker.on('moveend',(evt) => {
   const {lat:latForInput,lng:lngForInput} = evt.target.getLatLng();
   address.value = `${latForInput.toFixed(5)} ${lngForInput.toFixed(5)}`;
 });
 
-//добавила свой пин на карту
 mainPinMarker.addTo(map);
 
 const pinIconsConfig = {
@@ -96,9 +88,10 @@ const pinIcons = L.icon({
   iconSize: [pinIconsConfig.width, pinIconsConfig.height],
   iconAnchor: [pinIconsConfig.anchorX, pinIconsConfig.anchorY],
 });
-export const markerGroup = L.layerGroup().addTo(map);
 
-export const createMarker = (datum) => {
+const markerGroup = L.layerGroup().addTo(map);
+
+const createMarker = (datum) => {
   const {lat,lng} = datum.location;
   const marker = L.marker({
     lat,
@@ -111,16 +104,22 @@ export const createMarker = (datum) => {
     .bindPopup(createCard(datum));
 };
 
-export const createMarkers = (data,maxQuantity) => {
+const createMarkers = (data,maxQuantity) => {
   data.slice(0,maxQuantity).forEach((datum) => {
     createMarker(datum);
   });
-
 };
 
-//ПОДУМАТЬ ОБ ОБЪЕДИНЕНИИ
-//Возвращение красной метки на место по нажатию на кнопку
-export const returnMarkerToStart = () => mainPinMarker.setLatLng(START_COORDINATE);
-//Возвр карты к нач сост
-export const returnMapToInitialState = () => map.setView(START_COORDINATE, ZOOM);
+const returnMarkerToStart = () => mainPinMarker.setLatLng(START_COORDINATE);
 
+const returnMapToInitialState = () => map.setView(START_COORDINATE, ZOOM);
+
+export {
+  map,
+  setStartingAddress,
+  markerGroup,
+  createMarker,
+  createMarkers,
+  returnMarkerToStart,
+  returnMapToInitialState
+};

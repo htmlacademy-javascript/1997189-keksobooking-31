@@ -1,10 +1,8 @@
 export const MAX_AUTHOR_QUANTITY = '10';
 export const MIN_LATITUDE = 35.65000;
 export const MAX_LATITUDE = 35.70000;
-
 export const MIN_LONGITUDE = 139.70000;
 export const MAX_LONGITUDE = 139.80000;
-
 export const MAX_QUANTITY_ADVERTISEMENTS = 10;
 
 export const TYPE = [
@@ -21,8 +19,6 @@ export const CHECKIN = [
   '14:00'
 ];
 
-
-//СООТНОШЕНИЕ КОЛ-ВО КОМНАТ: КОЛИЧЕСТВО ГОСТЕЙ
 export const RATIO_ROOMS_GUESTS = {
   '1': ['1'],
   '2' : ['1','2'],
@@ -30,7 +26,6 @@ export const RATIO_ROOMS_GUESTS = {
   '100': ['0'],
 };
 
-//соотношение типа жилья и стоимости
 export const RATIO_TYPE_MIN_PRICE = {
   'bungalow': 0,
   'flat': 1000,
@@ -64,5 +59,8 @@ export const PRICE = {
   'middle' : {min: 10000, max: 50000},
   'high' : {min: 50000, max: 100000},
 };
+
+export const THROTTLE__TIMEOUT = 1000;
+export const MAX_INITIAL_CARDS = 10;
 
 export const FILE_TYPES = ['jpg', 'jpeg', 'png'];

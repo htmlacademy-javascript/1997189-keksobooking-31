@@ -26,13 +26,10 @@ const hideElement = (field) => {
 
 const advertisementCardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-//const map = document.querySelector('#map-canvas');
-
 const createCard = (datum) => {
   const {author,offer} = datum;
   const {title,address,guests,price,rooms,type,checkin,checkout,description,features,photos} = offer;
   const {avatar} = author;
-  // const fragment = document.createDocumentFragment();
   const cardElement = advertisementCardTemplate.cloneNode(true);
   const popupTitle = cardElement.querySelector('.popup__title');
   const popupAdress = cardElement.querySelector('.popup__text--address');
@@ -49,7 +46,7 @@ const createCard = (datum) => {
   popupTitle.textContent = title;
   popupAdress.textContent = address;
   popupPrice.textContent = `${price} ₽/ночь`;
-  quantityOfGuests.textContent = `${rooms} комнаты для ${guests} гостей`;// КОРРЕКЦИЯ ОКОНЧАНИЙ СУЩЕСТВИТЕЛЬНЫХ!
+  quantityOfGuests.textContent = `${rooms} комнаты для ${guests} гостей`;
   popupType.textContent = translateType(type);
   time.textContent = `Заезд после ${checkin}, выезд до ${checkout}`;
 
@@ -75,10 +72,7 @@ const createCard = (datum) => {
     renderFeatures(featuresListItems,features);
   }
 
-  //fragment.appendChild(cardElement);
   return cardElement;
-
-  //map.appendChild(fragment);
 };
 
 export {createCard};

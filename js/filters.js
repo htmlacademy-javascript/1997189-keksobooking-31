@@ -1,5 +1,10 @@
-import {PRICE,MAX_QUANTITY_ADVERTISEMENTS} from './constants.js';
-import {createMarkers,markerGroup,createMarker} from './map.js';
+import {
+  PRICE,
+  MAX_QUANTITY_ADVERTISEMENTS,
+  THROTTLE__TIMEOUT,
+  MAX_INITIAL_CARDS} from './constants.js';
+
+import {createMarkers,markerGroup} from './map.js';
 import {throttle} from './utils.js';
 import {returnMarkerToStart,returnMapToInitialState} from './map.js';
 
@@ -9,17 +14,16 @@ const fieldRooms = document.querySelector('#housing-rooms');
 const fieldQuests = document.querySelector('#housing-guests');
 
 const filterForm = document.querySelector('.map__filters');
+const localData = [];
 
 
 const makeArrayFromFeatures = () => Array.from(filterForm.querySelectorAll('input[name ="features"]:checked'), (input) => input.value);
 
-
-//чистит поля формы селекты
-export const resetFilterForm = (obj,maxQuantity) => {
+const resetFilterForm = (obj,maxQuantity) => {
   filterForm.reset();
   returnMarkerToStart();
   returnMapToInitialState();
-  createMarkers(obj,maxQuantity);//добавила отрисовку маркеров в функцию сброса фильтров
+  createMarkers(obj,maxQuantity);
 };
 
 const clearCreateMarkers = (newArr,quantity) => {
@@ -37,18 +41,18 @@ const filterAdvertisementCards = (cards,features) => {
   return newArr;
 };
 
-export const localData = [];
-
 const throttleActions = (cards) => {
   const checkedFeatures = makeArrayFromFeatures();
   const filteredCards = filterAdvertisementCards(cards,checkedFeatures);
   clearCreateMarkers(filteredCards,MAX_QUANTITY_ADVERTISEMENTS);
 };
 
-export const showCards = (cards) => {
-  localData.push(...cards.slice(0,10));
-  resetFilterForm(cards,MAX_QUANTITY_ADVERTISEMENTS);//добавила отрисовку маркеров в функцию сброса фильтров
+const showCards = (cards) => {
+  localData.push(...cards.slice(0,MAX_INITIAL_CARDS));
+  resetFilterForm(cards,MAX_QUANTITY_ADVERTISEMENTS);
 
-  const onFilterChange = throttle(() => throttleActions(cards),1000);
+  const onFilterChange = throttle(() => throttleActions(cards),THROTTLE__TIMEOUT);
   filterForm.addEventListener('change',onFilterChange);
 };
+
+export {showCards,resetFilterForm,localData};

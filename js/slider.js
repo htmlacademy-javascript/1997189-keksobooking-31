@@ -1,5 +1,6 @@
 import{pristine} from './form.js';
 import{MAX_PRICE_ROOM} from './constants.js';
+
 const sliderContainer = document.querySelector('.ad-form__slider');
 const priceInput = document.querySelector('#price');
 
@@ -38,8 +39,7 @@ priceInput.addEventListener('change', (evt) => {
   sliderContainer.noUiSlider.set(evt.target.value);
 });
 
-//Сброс установленных пользователем значений цены к цене по умолчанию
-export const resetSliderPrice = ()=>{
+const resetSliderPrice = ()=>{
   sliderContainer.noUiSlider.updateOptions({
     range: {
       'min': 0,
@@ -48,3 +48,5 @@ export const resetSliderPrice = ()=>{
     start: 0,
   });
 };
+
+export {resetSliderPrice};
