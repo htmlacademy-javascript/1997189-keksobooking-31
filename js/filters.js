@@ -1,6 +1,6 @@
 import {PRICE,MAX_QUANTITY_ADVERTISEMENTS} from './constants.js';
 import {createMarkers,markerGroup,createMarker} from './map.js';
-import {debounce,throttle} from './utils.js';
+import {throttle} from './utils.js';
 import {returnMarkerToStart,returnMapToInitialState} from './map.js';
 
 const fieldType = document.querySelector('#housing-type');
@@ -39,17 +39,16 @@ const filterAdvertisementCards = (cards,features) => {
 
 export const localData = [];
 
+const throttleActions = (cards) => {
+  const checkedFeatures = makeArrayFromFeatures();
+  const filteredCards = filterAdvertisementCards(cards,checkedFeatures);
+  clearCreateMarkers(filteredCards,MAX_QUANTITY_ADVERTISEMENTS);
+};
+
 export const showCards = (cards) => {
   localData.push(...cards.slice(0,10));
   resetFilterForm(cards,MAX_QUANTITY_ADVERTISEMENTS);//добавила отрисовку маркеров в функцию сброса фильтров
 
-  filterForm.addEventListener('change',() => {
-    const checkedFeatures = makeArrayFromFeatures();
-    const filteredCards = filterAdvertisementCards(cards,checkedFeatures);
-    // const debounceFunction = (debounce(() => clearCreateMarkers(filteredCards,MAX_QUANTITY_ADVERTISEMENTS),1000));
-    // debounceFunction();
-
-    const throttleFunction = (throttle(() => clearCreateMarkers(filteredCards,MAX_QUANTITY_ADVERTISEMENTS),10000));
-    throttleFunction();
-  });
+  const onFilterChange = throttle(() => throttleActions(cards),1000);
+  filterForm.addEventListener('change',onFilterChange);
 };

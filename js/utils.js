@@ -70,17 +70,6 @@ export const showDataErrorMessage = () => {
   document.body.append(errorMessage);
 };
 
-export function debounce (callback, timeoutDelay = 500) {
-  let timeoutId;
-  return (...rest) => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      console.log('сработал дебаунс');
-      callback.apply(this, rest);
-    }, timeoutDelay);
-  };
-}
-
 export function throttle (callback, delayBetweenFrames) {
   // Используем замыкания, чтобы время "последнего кадра" навсегда приклеилось
   // к возвращаемой функции с условием, тогда мы его сможем перезаписывать
@@ -97,7 +86,7 @@ export function throttle (callback, delayBetweenFrames) {
     console.log('время меньше задержки')
     if (now - lastTime >= delayBetweenFrames) {
       console.log(now - lastTime)
-      console.log(delayBetweenFrames)
+      console.log(lastTime)
       console.log(now - lastTime >= delayBetweenFrames)
       callback.apply(this, rest);
       lastTime = now;
@@ -111,7 +100,6 @@ export const resetPhotoSrc = function (element) {
   } else {
     element.style.backgroundImage = '';
   }
-  // element.src ? 'img/muffin-grey.svg' : element.style.backgroundImage = ;
 };
 
 // export const resetAllPhotosSrc = (...allPhotos) => {
