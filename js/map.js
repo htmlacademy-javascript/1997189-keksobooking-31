@@ -60,7 +60,7 @@ L.tileLayer(TILE_LAYER, {
 }).addTo(map);
 
 const setStartingAddress = () => {
-  address.value = `${latForMainPin},${lngForMainPin}`;
+  address.value = `${latForMainPin.toFixed(5)},${lngForMainPin.toFixed(5)}`;
   return address.value;
 };
 
@@ -110,9 +110,15 @@ const createMarkers = (data,maxQuantity) => {
   });
 };
 
-const returnMarkerToStart = () => mainPinMarker.setLatLng(START_COORDINATE);
+const returnMarkerMapToInitialState = () => {
+  mainPinMarker.setLatLng(START_COORDINATE);
+  map.setView(START_COORDINATE, ZOOM);
+};
 
-const returnMapToInitialState = () => map.setView(START_COORDINATE, ZOOM);
+const clearCreateMarkers = (newArr,quantity) => {
+  markerGroup.clearLayers();
+  createMarkers(newArr,quantity);
+};
 
 export {
   map,
@@ -120,6 +126,6 @@ export {
   markerGroup,
   createMarker,
   createMarkers,
-  returnMarkerToStart,
-  returnMapToInitialState
+  returnMarkerMapToInitialState,
+  clearCreateMarkers
 };

@@ -6,9 +6,8 @@ import {
   FILE_TYPES} from './constants.js';
 
 import {
-  returnMarkerToStart,
   setStartingAddress,
-  returnMapToInitialState,
+  returnMarkerMapToInitialState,
   map,
   createMarker} from './map.js';
 
@@ -19,8 +18,13 @@ import {
 
 import {resetSliderPrice} from './slider.js';
 import {sendData} from './api.js';
-import {avatarPreview} from './avatar.js';
+import {avatarPreview,avatarInputListener} from './avatar.js';
 import {localData} from './filters.js';
+
+//const avatarInput = document.querySelector('#avatar');
+//const avatarPreview = document.querySelector('.ad-form-header__preview img');
+
+avatarInputListener();
 
 const filterForm = document.querySelector('.map__filters');
 const mapFeaturesElem = [...document.querySelectorAll('.map__filters fieldset')];
@@ -192,8 +196,7 @@ const showInitialCards = (cards) => {
 const resetForm = () => {
   adForm.reset();
   pristine.reset();
-  returnMarkerToStart();
-  returnMapToInitialState();
+  returnMarkerMapToInitialState();
   resetSliderPrice();
   setStartingAddress();
   resetPhotoSrc(avatarPreview);

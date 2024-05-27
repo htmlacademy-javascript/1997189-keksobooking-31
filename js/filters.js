@@ -4,9 +4,13 @@ import {
   THROTTLE__TIMEOUT,
   MAX_INITIAL_CARDS} from './constants.js';
 
-import {createMarkers,markerGroup} from './map.js';
+import {
+  createMarkers,
+  returnMarkerMapToInitialState,
+  clearCreateMarkers
+} from './map.js';
+
 import {throttle} from './utils.js';
-import {returnMarkerToStart,returnMapToInitialState} from './map.js';
 
 const fieldType = document.querySelector('#housing-type');
 const fieldPrice = document.querySelector('#housing-price');
@@ -21,14 +25,8 @@ const makeArrayFromFeatures = () => Array.from(filterForm.querySelectorAll('inpu
 
 const resetFilterForm = (obj,maxQuantity) => {
   filterForm.reset();
-  returnMarkerToStart();
-  returnMapToInitialState();
+  returnMarkerMapToInitialState();
   createMarkers(obj,maxQuantity);
-};
-
-const clearCreateMarkers = (newArr,quantity) => {
-  markerGroup.clearLayers();
-  createMarkers(newArr,quantity);
 };
 
 const filterAdvertisementCards = (cards,features) => {
