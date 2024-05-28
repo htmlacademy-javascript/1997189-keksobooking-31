@@ -61,7 +61,6 @@ const makeActiveForm = (form,elementsOfForm,additionalFields = []) => {
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-
 const showDataErrorMessage = () => {
   document.body.append(errorMessage);
 };
