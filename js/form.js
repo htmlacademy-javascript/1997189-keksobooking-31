@@ -18,13 +18,10 @@ import {
 
 import {resetSliderPrice} from './slider.js';
 import {sendData} from './api.js';
-import {avatarPreview,avatarInputListener} from './avatar.js';
+import {avatarInputListener} from './avatar.js';
 import {localData} from './filters.js';
 
-//const avatarInput = document.querySelector('#avatar');
-//const avatarPreview = document.querySelector('.ad-form-header__preview img');
-
-avatarInputListener();
+const avatarPreview = document.querySelector('.ad-form-header__preview img');
 
 const filterForm = document.querySelector('.map__filters');
 const mapFeaturesElem = [...document.querySelectorAll('.map__filters fieldset')];
@@ -41,8 +38,8 @@ const adFormPhoto = adForm.querySelector('.ad-form__photo');
 const roomsQuantity = adForm.querySelector('#room_number');
 
 const capacity = adForm.querySelector('#capacity');
-const TIMEIN = adForm.querySelector('#timein');
-const TIMEOUT = adForm.querySelector('#timeout');
+const timeIn = adForm.querySelector('#timein');
+const timeOut = adForm.querySelector('#timeout');
 const body = document.querySelector('body');
 
 const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
@@ -166,15 +163,15 @@ capacity.addEventListener('change',onCapacityChange);
 const validateRoomsQuantity = () => RATIO_ROOMS_GUESTS[roomsQuantity.value].includes(capacity.value);
 
 const onChangeTimeIn = () => {
-  TIMEOUT.value = TIMEIN.value;
+  timeOut.value = timeIn.value;
 };
 
 const onChangeTimeOut = () => {
-  TIMEIN.value = TIMEOUT.value;
+  timeIn.value = timeOut.value;
 };
 
-TIMEIN.addEventListener('change',onChangeTimeIn);
-TIMEOUT.addEventListener('change',onChangeTimeOut);
+timeIn.addEventListener('change',onChangeTimeIn);
+timeOut.addEventListener('change',onChangeTimeOut);
 
 pristine.addValidator(roomsQuantity,validateRoomsQuantity,showQuantityErrorMessage);
 pristine.addValidator(capacity,validateRoomsQuantity,showQuantityErrorMessage);
@@ -235,6 +232,8 @@ adForm.addEventListener('submit',(evt) => {
       });
   }
 });
+
+avatarInputListener();
 
 export {
   showErrorMessageForSending,

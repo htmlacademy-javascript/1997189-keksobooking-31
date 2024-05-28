@@ -15,4 +15,4 @@ const avatarInputListener = () => {
   });
 };
 
-export {avatarPreview,avatarInputListener};
+export {avatarInputListener};
