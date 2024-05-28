@@ -83,6 +83,7 @@ const resetPhotoSrc = function (element) {
   element.style.backgroundImage = '';
 };
 
+
 export
 {getRandomInteger,
   getRandomFractional,
